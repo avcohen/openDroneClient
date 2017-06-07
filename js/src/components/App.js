@@ -1,19 +1,27 @@
 import React, { Component } from 'react';
-import MapContainer from './MapContainer';
+import MapContainer2 from './MapContainer2';
+import Filters from './Filters';
 import Footer from './Footer';
 import Header from './Header';
 
 export default class App extends Component {
+    constructor(props){
+        super(props)
+    }
+    componentDidMount(){
 
-    componentDidMount() {}
+    }
 
-    componentWillReceiveProps(nextProps){}
+    componentWillReceiveProps(){
+
+    }
 
     render() {
         return (
             <div>
                 <Header {...this.props} />
-                <MapContainer {...this.props} />
+                <Filters {...this.props} />
+                <MapContainer2 {...this.props} />
                 <Footer {...this.props} />
             </div>
         );

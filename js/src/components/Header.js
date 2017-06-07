@@ -14,6 +14,7 @@ export default class Header extends Component {
     render() {
         return (
             <div>
+                <h1>openDrone 0.1</h1>
                 <Menu items={this.state.menuItems} />
             </div>
         );
