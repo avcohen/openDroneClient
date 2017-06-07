@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { GoogleApiComponent } from 'google-maps-react/dist/GoogleApiComponent';
+import GoogleApiComponent from 'google-maps-react';
 
 export class MapContainer extends Component {
 
@@ -8,11 +8,11 @@ export class MapContainer extends Component {
             return <div>lol still loading</div>
         }
         return (
-            <div>Map will live here.</div>
+            <div>le map will live here.</div>
         );
     }
 }
 
 export default GoogleApiComponent({
     apiKey : 'AIzaSyCgnmah1dhhXHZBFOj4z3CTuGxaatp0htE'
-})(DroneMap)
+})(MapContainer)
