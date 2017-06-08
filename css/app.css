@@ -9,6 +9,10 @@
     font-size: 12px;
 }
 
+#app {
+    padding: 50px;
+}
+
 #app .react-grid-HeaderCell {
     background-color: #292929;
     color: #fff;
