@@ -28222,6 +28222,10 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactDom = __webpack_require__(232);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
 var _superagent = __webpack_require__(429);
 
 var _superagent2 = _interopRequireDefault(_superagent);
@@ -28275,11 +28279,41 @@ var MapContainer = function (_Component) {
                 position: { lat: 35.996023, lng: 36.784644 },
                 map: this.map
             });
+
+            var root = _reactDom2.default.findDOMNode(this.refs.root);
+            var node = _reactDom2.default.findDOMNode(this.refs.shim);
+            root.addEventListener('mouseenter', function () {
+                setTimeout(function () {
+                    node.style.zIndex = -1;
+                    node.style.cursor = 'initial';
+                }, 2000);
+            });
+            root.addEventListener('mouseleave', function () {
+                node.style.zIndex = 2;
+                node.style.cursor = 'wait';
+            });
         }
     }, {
         key: 'render',
         value: function render() {
-            return _react2.default.createElement('div', { id: 'droneMap', ref: 'map', style: this.mapStyle });
+            var parStyles = Object.assign({}, {
+                position: 'relative'
+            }, this.mapStyle);
+            var shimStyles = {
+                position: 'absolute',
+                zIndex: 2,
+                height: '100%',
+                width: '100%',
+                top: 0,
+                left: 0,
+                cursor: 'wait'
+            };
+            return _react2.default.createElement(
+                'div',
+                { ref: 'root', style: parStyles },
+                _react2.default.createElement('div', { ref: 'shim', style: shimStyles }),
+                _react2.default.createElement('div', { id: 'droneMap', ref: 'map', style: this.mapStyle })
+            );
         }
     }]);
 
