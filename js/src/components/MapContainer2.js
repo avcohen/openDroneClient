@@ -5,17 +5,19 @@ export default class MapContainer extends Component {
 
     state = {
         searchQuery : null,
+        searchResults : null,
         center : { lat: 35.996023, lng: 36.784644 },
         displayAll : true
     }
 
     constructor(props){
         super(props)
+        this.props.dispatch('FETCH_ALL_DATA', this.state)
 
     }
 
     componentWillMount(){
-        this.props.dispatch('FETCH_ALL_DATA', this.state)
+        // this.props.dispatch('FETCH_ALL_DATA', this.state)
     }
 
     componentDidMount(){
