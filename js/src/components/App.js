@@ -5,22 +5,20 @@ import Footer from './Footer';
 import Header from './Header';
 
 export default class App extends Component {
-    constructor(props){
-        super(props)
+    constructor(){
+        super()
     }
     componentDidMount(){
-
     }
 
     componentWillReceiveProps(){
-
     }
 
     render() {
         return (
             <div>
                 <Header {...this.props} />
-                <Filters {...this.props} />
+                <Filters {...this.props} {...this.state} />
                 <MapContainer2 {...this.props} />
                 <Footer {...this.props} />
             </div>

@@ -9,19 +9,31 @@ export function updateIndex(oldState, options) {
     });
 }
 
+export function updateFilterState(oldState, options) {
+    console.log(oldState , options);
+    const { country, administration, radius, filterByRadius} = oldState
+    return Promise.resolve().then( _ => {
+        return Object.assign({}, oldState, {
+            country : options.country,
+            administration : options.administration,
+            radius : options.radius,
+            filterByRadius : options.filterByRadius,
+        })
+    })
+}
+
 export function fetchAll(oldState, options) {
-    return Promise.resolve().then(_ => {
-        console.log(options)
+    return new Promise((resolve, reject) => {
         request
             .get('http://localhost:8001/api/')
             .end((err,res)=>{
                 if (err || !res.ok){
-                    console.error(err)
+                    reject(err)
                     return;
                 }
-                return Object.assign({}, oldState, {
+                resolve(Object.assign({}, oldState, {
                     searchResults : JSON.parse(res.text)
-                })
+                }))
             })
     })
     .catch(e => console.log(e));

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import request from 'superagent';
 
 export default class MapContainer extends Component {
@@ -17,7 +18,6 @@ export default class MapContainer extends Component {
     }
 
     componentWillMount(){
-        // this.props.dispatch('FETCH_ALL_DATA', this.state)
     }
 
     componentDidMount(){
@@ -30,18 +30,48 @@ export default class MapContainer extends Component {
             position : {lat: 35.996023, lng: 36.784644},
             map : this.map
         })
-    }
 
-    mapStyle = {
-        width : "100%",
-        height : "600px",
+        const root = ReactDOM.findDOMNode(this.refs.root);
+        const node = ReactDOM.findDOMNode(this.refs.shim);
+
+        root.addEventListener('mouseenter', () => {
+            setTimeout(() => {
+                node.style.zIndex = -1;
+                node.style.cursor = 'initial';
+            }, 2000)
+        });
+
+        root.addEventListener('mouseleave', () => {
+            node.style.zIndex = 2;
+            node.style.cursor = 'wait';
+        });
     }
 
 
 
     render() {
+        const mapStyle = {
+            width : "100%",
+            height : "600px",
+        }
+        const parStyles = Object.assign({}, {
+            position: 'relative'
+        }, this.mapStyle);
+
+        const shimStyles = {
+            position: 'absolute',
+            zIndex: 2,
+            height: '100%',
+            width: '100%',
+            top: 0,
+            left: 0,
+            cursor: 'wait',
+        }
         return (
-            <div id="droneMap" ref="map" style={this.mapStyle}></div>
+            <div ref="root" style={parStyles}>
+                <div ref="shim" style={shimStyles}></div>
+                <div id="droneMap" ref="map" style={mapStyle}></div>
+            </div>
         );
     }
 }

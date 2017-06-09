@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Form, Checkbox } from 'semantic-ui-react';
+import ReactDOM from 'react-dom';
+import { Button, Checkbox, Form, Input, Select } from 'semantic-ui-react';
 
 const options = {
     country : [
@@ -18,26 +19,47 @@ const options = {
 
 export default class Filters extends Component {
 
-    state = {};
 
     constructor(props){
         super(props)
+        this.state = {
+            country : "all",
+            administration : "all",
+            radius : null,
+            filterByRadius : false,
+        }
+        this.handleChange = this.handleChange.bind(this);
     }
 
-    componentDidMount(){}
+    handleChange(e) {
+        const target = e.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
 
-    componentWillReceiveProps(){}
+
+        this.setState({
+          [name]: value
+        });
+        // this.props.dispatch('UPDATE_FILTERS', this.state)
+
+    }
+
+    componentDidMount(){
+
+    }
+
 
     render() {
+
         return (
-            <Form>
-                <Form.Group widths='equal'>
-                    <Form.Select label='Country' options={options.country} placeholder='Country' />
-                    <Form.Select label='Administration' options={options.administration} placeholder='Administration' />
-                    <Form.Field><Checkbox label='Search by Radius (KM)' /></Form.Field>
-                    <Form.Input type="number" />
-                </Form.Group>
-            </Form>
+            <form>
+                <input
+                    name="filterByRadius"
+                    type="checkbox"
+                    checked={ this.state.filterByRadius }
+                    onChange={ this.handleChange }
+                />
+            </form>
         );
     };
 }

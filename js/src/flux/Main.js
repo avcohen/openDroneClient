@@ -13,6 +13,10 @@ export default class Main extends Component {
 		});
 	}
 
+    componentWillReceiveProps(){
+        this.dispatch('FETCH_ALL_DATA')
+    }
+
 	render() {
 		const sharedProps = {
 			dispatch: (...args) => this.dispatch(...args),
