@@ -1,25 +1,25 @@
 import React, { Component } from 'react';
-import MapContainer2 from './MapContainer2';
+import MapContainer, { InfoWindow, Marker } from './MapContainer';
 import Filters from './Filters';
 import Footer from './Footer';
 import Header from './Header';
 
 export default class App extends Component {
-    constructor(){
-        super()
+    constructor(props){
+        super(props)
     }
-    componentDidMount(){
-    }
+    componentDidMount(){}
 
-    componentWillReceiveProps(){
-    }
+    componentWillReceiveProps(){}
 
     render() {
         return (
             <div>
                 <Header {...this.props} />
                 <Filters {...this.props} {...this.state} />
-                <MapContainer2 {...this.props} />
+                <MapContainer {...this.props} apiKey={"AIzaSyCgnmah1dhhXHZBFOj4z3CTuGxaatp0htE"}>
+                    {this.props.markers.map(marker => <Marker {...marker} ></Marker>)}
+                </MapContainer>
                 <Footer {...this.props} />
             </div>
         );

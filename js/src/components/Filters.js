@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Button, Checkbox, Form, Input, Select } from 'semantic-ui-react';
+import { Form } from 'semantic-ui-react';
 
 const options = {
     country : [
@@ -19,7 +19,6 @@ const options = {
 
 export default class Filters extends Component {
 
-
     constructor(props){
         super(props)
         this.state = {
@@ -28,38 +27,31 @@ export default class Filters extends Component {
             radius : null,
             filterByRadius : false,
         }
-        this.handleChange = this.handleChange.bind(this);
+        // this.handleChange = this.handleChange.bind(this);
     }
 
-    handleChange(e) {
-        const target = e.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
+    handleChange = (e, {name, value}) => {
+        console.log(name, value)
+        // ***
+        // HOW TO ACCESS PROPS OF ITEMS CLICKED? REF? WHUT....
+        // ***
 
-
-        this.setState({
-          [name]: value
-        });
-        // this.props.dispatch('UPDATE_FILTERS', this.state)
-
+        // this.setState({ value })
     }
-
-    componentDidMount(){
-
-    }
-
 
     render() {
-
         return (
-            <form>
-                <input
-                    name="filterByRadius"
-                    type="checkbox"
-                    checked={ this.state.filterByRadius }
-                    onChange={ this.handleChange }
-                />
-            </form>
+            <Form>
+                <Form.Group widths='equal'>
+                    <Form.Select name="country" label="Country" options={options.country} placeholder="All" onChange={this.handleChange} />
+                    <Form.Select label="Administration" options={options.administration} placeholder="All" onChange={this.handleChange} />
+                        <Form.Group>
+                            <Form.Checkbox label="Filter By Radius" checked={ this.state.filterByRadius } onChange={this.handleChange} />
+                            <Form.Input label="Lat / Long" placeholder="-51.1245,12.3345" onChange={this.handleChange} />
+                            <Form.Input label="Distance (KM)" onChange={this.handleChange} />
+                        </Form.Group>
+                </Form.Group>
+            </Form>
         );
     };
 }

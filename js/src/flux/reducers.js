@@ -32,7 +32,7 @@ export function fetchAll(oldState, options) {
                     return;
                 }
                 resolve(Object.assign({}, oldState, {
-                    searchResults : JSON.parse(res.text)
+                    cachedResults : JSON.parse(res.text)
                 }))
             })
     })
