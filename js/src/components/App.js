@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import MapContainer, { InfoWindow, Marker } from './MapContainer';
+import MapContainer from './MapContainer';
 import Filters from './Filters';
 import Footer from './Footer';
 import Header from './Header';
@@ -17,9 +17,7 @@ export default class App extends Component {
             <div>
                 <Header {...this.props} />
                 <Filters {...this.props} {...this.state} />
-                <MapContainer {...this.props} apiKey={"AIzaSyCgnmah1dhhXHZBFOj4z3CTuGxaatp0htE"}>
-                    {this.props.markers.map(marker => <Marker {...marker} ></Marker>)}
-                </MapContainer>
+                <MapContainer {...this.props} apiKey={"AIzaSyCgnmah1dhhXHZBFOj4z3CTuGxaatp0htE"} />
                 <Footer {...this.props} />
             </div>
         );

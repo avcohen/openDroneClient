@@ -27996,13 +27996,7 @@ var App = function (_Component) {
                 null,
                 _react2.default.createElement(_Header2.default, this.props),
                 _react2.default.createElement(_Filters2.default, _extends({}, this.props, this.state)),
-                _react2.default.createElement(
-                    _MapContainer2.default,
-                    _extends({}, this.props, { apiKey: "AIzaSyCgnmah1dhhXHZBFOj4z3CTuGxaatp0htE" }),
-                    this.props.markers.map(function (marker) {
-                        return _react2.default.createElement(_MapContainer.Marker, marker);
-                    })
-                ),
+                _react2.default.createElement(_MapContainer2.default, _extends({}, this.props, { apiKey: "AIzaSyCgnmah1dhhXHZBFOj4z3CTuGxaatp0htE" })),
                 _react2.default.createElement(_Footer2.default, this.props)
             );
         }
@@ -28243,9 +28237,8 @@ exports.default = Header;
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+	value: true
 });
-exports.Marker = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -28270,233 +28263,229 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var generateRandomFunc = function generateRandomFunc(functionRoot) {
-  var cb = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
+	var cb = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
 
-  var functionName = functionRoot + '_' + Date.now();
-  window[functionName] = function () {
-    var overrideCb = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+	var functionName = functionRoot + '_' + Date.now();
+	window[functionName] = function () {
+		var overrideCb = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
 
-    delete window[functionName];
-    if (overrideCb) {
-      overrideCb();
-      return;
-    }
-    cb();
-  };
-  return functionName;
+		delete window[functionName];
+		if (overrideCb) {
+			overrideCb();
+			return;
+		}
+		cb();
+	};
+	return functionName;
 };
 
 var paramify = function paramify(params) {
-  return Object.keys(params).map(function (key) {
-    return [key, params[key]].join('=');
-  }).join('&');
+	return Object.keys(params).map(function (key) {
+		return [key, params[key]].join('=');
+	}).join('&');
 };
 
 var loadGMapScript = function loadGMapScript(url, params) {
-  return new Promise(function (resolve, reject) {
-    var functionName = generateRandomFunc('gmapsCallback', function () {
-      resolve(true);
-    });
+	return new Promise(function (resolve, reject) {
+		var functionName = generateRandomFunc('gmapsCallback', function () {
+			resolve(true);
+		});
 
-    params = Object.assign({}, params, {
-      callback: functionName
-    });
+		params = Object.assign({}, params, {
+			callback: functionName
+		});
 
-    var script = document.createElement('script');
-    script.onload = function () {
-      return window[functionName];
-    };
-    script.onerror = function (e) {
-      return window[functionName](function () {
-        reject(e);
-      });
-    };
-    script.type = 'text/javascript';
-    script.src = url + '?' + paramify(params);
-    document.body.appendChild(script);
-  });
+		var script = document.createElement('script');
+		script.onload = function () {
+			return window[functionName];
+		};
+		script.onerror = function (e) {
+			return window[functionName](function () {
+				reject(e);
+			});
+		};
+		script.type = 'text/javascript';
+		script.src = url + '?' + paramify(params);
+		document.body.appendChild(script);
+	});
 };
 
 var loadMap = function loadMap(domNode) {
-  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  return new google.maps.Map(domNode, Object.assign({
-    zoom: 3
-  }, options));
+	var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+	return new google.maps.Map(domNode, Object.assign({
+		zoom: 3
+	}, options));
 };
 
 var MapContainer = function (_Component) {
-  _inherits(MapContainer, _Component);
+	_inherits(MapContainer, _Component);
 
-  function MapContainer() {
-    var _ref;
+	function MapContainer() {
+		var _ref;
 
-    var _temp, _this, _ret;
+		var _temp, _this, _ret;
 
-    _classCallCheck(this, MapContainer);
+		_classCallCheck(this, MapContainer);
 
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
+		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+			args[_key] = arguments[_key];
+		}
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = MapContainer.__proto__ || Object.getPrototypeOf(MapContainer)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-      mapLoaded: false,
-      mapUrl: 'https://maps.googleapis.com/maps/api/js'
-    }, _this._wrapStyle = {
-      position: 'relative',
-      width: "100%",
-      height: "600px"
-    }, _this._shimStyles = {
-      position: 'absolute',
-      zIndex: 2,
-      height: '100%',
-      width: '100%',
-      top: 0,
-      left: 0,
-      cursor: 'wait'
-    }, _temp), _possibleConstructorReturn(_this, _ret);
-  }
+		return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = MapContainer.__proto__ || Object.getPrototypeOf(MapContainer)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+			mapLoaded: false,
+			markersLoaded: false,
+			mapUrl: 'https://maps.googleapis.com/maps/api/js'
 
-  _createClass(MapContainer, [{
-    key: '_loadMap',
-    value: function _loadMap() {
-      var _this2 = this;
+			// marker = null
 
-      console.log(this.props);
-      var mapUrl = this.state.mapUrl;
-      var _props = this.props,
-          center = _props.center,
-          apiKey = _props.apiKey;
-      // console.log(center, apiKey)
+		}, _this._wrapStyle = {
+			position: 'relative',
+			width: "100%",
+			height: "600px"
+		}, _this._shimStyles = {
+			position: 'absolute',
+			zIndex: 2,
+			height: '100%',
+			width: '100%',
+			top: 0,
+			left: 0,
+			cursor: 'wait'
+		}, _temp), _possibleConstructorReturn(_this, _ret);
+	}
 
-      loadGMapScript(mapUrl, { key: apiKey }).then(function (_) {
-        return _this2.map = loadMap(_this2.refs.map, {
-          center: center
-        });
-      }).then(function (_) {
-        return _this2.setState({
-          mapLoaded: true
-        });
-      });
-    }
-  }, {
-    key: '_initShimLogic',
-    value: function _initShimLogic() {
-      var root = _reactDom2.default.findDOMNode(this.refs.root);
-      var node = _reactDom2.default.findDOMNode(this.refs.shim);
-      var timeout = null;
-      root.addEventListener('mouseenter', function () {
-        clearTimeout(timeout);
-        timeout = setTimeout(function () {
-          node.style.zIndex = -1;
-          node.style.cursor = 'initial';
-        }, 2000);
-      });
-      root.addEventListener('mouseleave', function () {
-        clearTimeout(timeout);
-        node.style.zIndex = 2;
-        node.style.cursor = 'wait';
-      });
-    }
-  }, {
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      this.props.dispatch('FETCH_ALL_DATA');
-      this._loadMap();
-      this._initShimLogic();
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var _wrapStyle = this._wrapStyle,
-          _shimStyles = this._shimStyles;
+	_createClass(MapContainer, [{
+		key: '_loadMap',
+		value: function _loadMap() {
+			var _this2 = this;
 
-      return _react2.default.createElement(
-        'div',
-        { ref: 'root', style: _wrapStyle },
-        _react2.default.createElement('div', { ref: 'shim', style: _shimStyles }),
-        _react2.default.createElement('div', { id: 'droneMap', ref: 'map', style: _wrapStyle }),
-        this.renderMarkers()
-      );
-    }
-  }, {
-    key: 'renderMarkers',
-    value: function renderMarkers() {
-      var _this3 = this;
+			// console.log(this.props)
+			var mapUrl = this.state.mapUrl;
+			var _props = this.props,
+			    center = _props.center,
+			    apiKey = _props.apiKey;
+			// console.log(center, apiKey)
 
-      var mapLoaded = this.state.mapLoaded;
+			loadGMapScript(mapUrl, { key: apiKey }).then(function (_) {
+				return _this2.map = loadMap(_this2.refs.map, {
+					// options
+					center: center
+				});
+			}).then(function (_) {
+				return _this2._loadMarkers();
+			}
+			// .then(_ => this._loadInfoWindows())
+			).then(function (_) {
+				return _this2.setState({
+					mapLoaded: true
+				});
+			});
+		}
+	}, {
+		key: '_loadMarkers',
+		value: function _loadMarkers() {
+			var _this3 = this;
 
-      if (!mapLoaded) return null;
-      console.log(this.props.children);
-      var children = this.props.children;
-      var Children = _react2.default.Children,
-          cloneElement = _react2.default.cloneElement;
+			this.props.markers.forEach(function (marker) {
+				var position = marker.position,
+				    animation = marker.animation;
 
-      return Children.map(children, function (child) {
-        return cloneElement(child, {
-          mapLoaded: true,
-          map: _this3.map
-        });
-      });
-    }
-  }]);
+				if (!_this3.map) return;
+				_this3.marker = new google.maps.Marker({
+					position: position,
+					map: _this3.map,
+					animation: google.maps.Animation[animation]
+				});
 
-  return MapContainer;
+				_this3.infoWindow = new google.maps.InfoWindow({
+					content: 'lol'
+				});
+
+				_this3.infoWindow.open(_this3.map, _this3.marker);
+
+				// this.infoWindow.addEventListener('click', () => {
+				//
+				// })
+			});
+		}
+
+		// _loadInfoWindows() {
+		// 	this.infoWindow = new google.maps.InfoWindow({
+		// 		content : this.props.marker.name,
+		// 	})
+		// 	this.infoWindow.open(this.map , this.marker)
+		// }
+
+	}, {
+		key: '_initShimLogic',
+		value: function _initShimLogic() {
+			var root = _reactDom2.default.findDOMNode(this.refs.root);
+			var node = _reactDom2.default.findDOMNode(this.refs.shim);
+			var timeout = null;
+			root.addEventListener('mouseenter', function () {
+				clearTimeout(timeout);
+				timeout = setTimeout(function () {
+					node.style.zIndex = -1;
+					node.style.cursor = 'initial';
+				}, 2000);
+			});
+			root.addEventListener('mouseleave', function () {
+				clearTimeout(timeout);
+				node.style.zIndex = 2;
+				node.style.cursor = 'wait';
+			});
+		}
+	}, {
+		key: 'componentDidMount',
+		value: function componentDidMount() {
+			this.props.dispatch('FETCH_ALL_DATA');
+			this._loadMap();
+			this._initShimLogic();
+		}
+	}, {
+		key: 'componentWillReceiveProps',
+		value: function componentWillReceiveProps(nextProps) {
+			this._loadMarkers(nextProps);
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			var _wrapStyle = this._wrapStyle,
+			    _shimStyles = this._shimStyles;
+
+			return _react2.default.createElement(
+				'div',
+				{ ref: 'root', style: _wrapStyle },
+				_react2.default.createElement('div', { ref: 'shim', style: _shimStyles }),
+				_react2.default.createElement('div', { id: 'droneMap', ref: 'map', style: _wrapStyle }),
+				this.renderMarkers()
+			);
+		}
+	}, {
+		key: 'renderMarkers',
+		value: function renderMarkers() {
+			var _this4 = this;
+
+			var mapLoaded = this.state.mapLoaded;
+
+			if (!mapLoaded) return null;
+			// console.log(this.props.children)
+			var children = this.props.children;
+			var Children = _react2.default.Children,
+			    cloneElement = _react2.default.cloneElement;
+
+			return Children.map(children, function (child) {
+				return cloneElement(child, {
+					mapLoaded: true,
+					map: _this4.map
+				});
+			});
+		}
+	}]);
+
+	return MapContainer;
 }(_react.Component);
 
 exports.default = MapContainer;
-
-var Marker = exports.Marker = function (_Component2) {
-  _inherits(Marker, _Component2);
-
-  function Marker() {
-    var _ref2;
-
-    var _temp2, _this4, _ret2;
-
-    _classCallCheck(this, Marker);
-
-    for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-      args[_key2] = arguments[_key2];
-    }
-
-    return _ret2 = (_temp2 = (_this4 = _possibleConstructorReturn(this, (_ref2 = Marker.__proto__ || Object.getPrototypeOf(Marker)).call.apply(_ref2, [this].concat(args))), _this4), _this4.state = {
-      markerLoaded: false
-    }, _this4.marker = null, _temp2), _possibleConstructorReturn(_this4, _ret2);
-  }
-
-  _createClass(Marker, [{
-    key: '_loadMarker',
-    value: function _loadMarker(props) {
-      var position = props.position,
-          map = props.map,
-          animation = props.animation;
-
-      if (!map) return;
-      this.marker = new google.maps.Marker({
-        position: position,
-        map: map,
-        animation: google.maps.Animation[animation]
-      });
-    }
-  }, {
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      this._loadMarker(this.props);
-    }
-  }, {
-    key: 'componentWillReceiveProps',
-    value: function componentWillReceiveProps(nextProps) {
-      this._loadMarker(nextProps);
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return null;
-    }
-  }]);
-
-  return Marker;
-}(_react.Component);
 
 /***/ }),
 /* 436 */

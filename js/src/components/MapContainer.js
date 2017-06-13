@@ -51,8 +51,11 @@ export default class MapContainer extends Component {
 
     state = {
         mapLoaded : false,
+		markersLoaded : false,
         mapUrl : 'https://maps.googleapis.com/maps/api/js'
     }
+
+	// marker = null
 
     _wrapStyle = {
         position: 'relative',
@@ -71,18 +74,46 @@ export default class MapContainer extends Component {
     }
 
     _loadMap() {
-		console.log(this.props)
+		// console.log(this.props)
         const {mapUrl} = this.state;
         const {center, apiKey} = this.props;
 		// console.log(center, apiKey)
         loadGMapScript(mapUrl, {key: apiKey})
             .then(_ => this.map = loadMap(this.refs.map, {
+				// options
                 center,
             }))
+			.then(_ => this._loadMarkers())
+			// .then(_ => this._loadInfoWindows())
             .then(_ => this.setState({
                 mapLoaded: true,
             }))
     }
+
+
+	_loadMarkers() {
+		this.props.markers.forEach((marker) =>{
+			const {position, animation} = marker;
+			if (!this.map) return;
+			this.marker = new google.maps.Marker({
+				position,
+				map : this.map,
+				animation: google.maps.Animation[animation]
+			});
+
+			this.infoWindow = new google.maps.InfoWindow({
+				content : 'lol',
+			})
+
+			this.infoWindow.open(this.map , this.marker);
+
+			// this.infoWindow.addEventListener('click', () => {
+			//
+			// })
+
+		})
+
+	}
 
     _initShimLogic() {
         const root = ReactDOM.findDOMNode(this.refs.root);
@@ -108,6 +139,9 @@ export default class MapContainer extends Component {
         this._initShimLogic();
     }
 
+	componentWillReceiveProps(nextProps) {
+		this._loadMarkers(nextProps)
+	}
 
     render(){
         const { _wrapStyle , _shimStyles } = this
@@ -123,7 +157,7 @@ export default class MapContainer extends Component {
 	renderMarkers(){
 			const {mapLoaded} = this.state;
 			if (!mapLoaded) return null;
-			console.log(this.props.children)
+			// console.log(this.props.children)
 			const {children} = this.props;
 			const {Children, cloneElement} = React;
 			return Children.map(children, (child) => cloneElement(child, {
@@ -131,34 +165,4 @@ export default class MapContainer extends Component {
 				map: this.map,
 			}))
 	}
-}
-
-export class Marker extends Component {
-	state = {
-		markerLoaded : false,
-	}
-
-	marker = null
-	_loadMarker(props) {
-		const {position, map, animation} = props;
-		if (!map) return;
-		this.marker = new google.maps.Marker({
-            position,
-            map,
-            animation: google.maps.Animation[animation]
-        });
-	}
-
-	componentDidMount() {
-		this._loadMarker(this.props);
-	}
-
-	componentWillReceiveProps(nextProps) {
-		this._loadMarker(nextProps)
-	}
-
-	render() {
-		return null;
-	}
-
 }
