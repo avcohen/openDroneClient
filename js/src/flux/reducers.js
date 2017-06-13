@@ -10,7 +10,6 @@ export function updateIndex(oldState, options) {
 }
 
 export function updateFilterState(oldState, options) {
-    console.log(oldState , options);
     const { country, administration, radius, filterByRadius} = oldState
     return Promise.resolve().then( _ => {
         return Object.assign({}, oldState, {
@@ -23,6 +22,7 @@ export function updateFilterState(oldState, options) {
 }
 
 export function fetchAll(oldState, options) {
+    console.log('returning all data from api')
     return new Promise((resolve, reject) => {
         request
             .get('http://localhost:8001/api/')
@@ -31,8 +31,11 @@ export function fetchAll(oldState, options) {
                     reject(err)
                     return;
                 }
+                const jsonData = JSON.parse(res.text);
+                const arrayResults = Object.values(jsonData);
                 resolve(Object.assign({}, oldState, {
-                    cachedResults : JSON.parse(res.text)
+                    // cachedResults : JSON.parse(res.text)
+                    cachedResults : arrayResults
                 }))
             })
     })

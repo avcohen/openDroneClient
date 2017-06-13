@@ -1,4 +1,4 @@
-import { updateIndex, fetchAll , updateFilterState } from './reducers';
+import { fetchAll, updateFilterState, updateIndex } from './reducers';
 
 export const actions = {
 	'UPDATE_IDX': (oldStore, options) => updateIndex(oldStore, options),

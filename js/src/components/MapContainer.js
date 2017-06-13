@@ -49,13 +49,18 @@ const loadMap = (domNode, options = {}) => new google.maps.Map(domNode, Object.a
 
 export default class MapContainer extends Component {
 
+	constructor(props){
+		super(props);
+		console.log('fetching all data from api')
+		this.props.dispatch('FETCH_ALL_DATA');
+
+	}
+
     state = {
         mapLoaded : false,
 		markersLoaded : false,
         mapUrl : 'https://maps.googleapis.com/maps/api/js'
     }
-
-	// marker = null
 
     _wrapStyle = {
         position: 'relative',
@@ -75,8 +80,8 @@ export default class MapContainer extends Component {
 
     _loadMap() {
 		// console.log(this.props)
-        const {mapUrl} = this.state;
-        const {center, apiKey} = this.props;
+        const { mapUrl} = this.state;
+        const { center, apiKey } = this.props;
 		// console.log(center, apiKey)
         loadGMapScript(mapUrl, {key: apiKey})
             .then(_ => this.map = loadMap(this.refs.map, {
@@ -92,27 +97,35 @@ export default class MapContainer extends Component {
 
 
 	_loadMarkers() {
-		this.props.markers.forEach((marker) =>{
-			const {position, animation} = marker;
+		console.log('loading markers', this.props);
+		this.props.cachedResults.forEach((strike) => {
+			console.log(strike)
 			if (!this.map) return;
 			this.marker = new google.maps.Marker({
-				position,
+				strikeData : {
+					country : strike.country,
+					date : strike.date,
+					kills : strike.kills,
+					coords : { lat : strike.lat , lng : strike.lon }
+				},
+				position : { lat : strike.lat, lng : strike.lon },
 				map : this.map,
-				animation: google.maps.Animation[animation]
+				animation: google.maps.Animation['DROP']
 			});
 
 			this.infoWindow = new google.maps.InfoWindow({
-				content : 'lol',
+				content : `
+					<h3>Location : ${this.marker.strikeData.country}</h3>
+					<h5>Date : ${this.marker.strikeData.date}</h5>
+					<h5>Kills : ${this.marker.strikeData.kills}</h5>
+					<h5>Coords : ${this.marker.strikeData.coords.lat} , ${this.marker.strikeData.coords.lng} </h5>
+				`,
 			})
 
-			this.infoWindow.open(this.map , this.marker);
-
-			// this.infoWindow.addEventListener('click', () => {
-			//
-			// })
-
+			this.marker.addListener('click', () => {
+				this.infoWindow.open(this.map , this.marker);
+			})
 		})
-
 	}
 
     _initShimLogic() {
@@ -134,13 +147,13 @@ export default class MapContainer extends Component {
     }
 
     componentDidMount(){
-        this.props.dispatch('FETCH_ALL_DATA')
         this._loadMap();
         this._initShimLogic();
     }
 
 	componentWillReceiveProps(nextProps) {
-		this._loadMarkers(nextProps)
+		// this._loadMarkers(nextProps)
+		// why need this?
 	}
 
     render(){

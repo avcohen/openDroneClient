@@ -28320,29 +28320,22 @@ var loadMap = function loadMap(domNode) {
 var MapContainer = function (_Component) {
 	_inherits(MapContainer, _Component);
 
-	function MapContainer() {
-		var _ref;
-
-		var _temp, _this, _ret;
-
+	function MapContainer(props) {
 		_classCallCheck(this, MapContainer);
 
-		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-			args[_key] = arguments[_key];
-		}
+		var _this = _possibleConstructorReturn(this, (MapContainer.__proto__ || Object.getPrototypeOf(MapContainer)).call(this, props));
 
-		return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = MapContainer.__proto__ || Object.getPrototypeOf(MapContainer)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+		_this.state = {
 			mapLoaded: false,
 			markersLoaded: false,
 			mapUrl: 'https://maps.googleapis.com/maps/api/js'
-
-			// marker = null
-
-		}, _this._wrapStyle = {
+		};
+		_this._wrapStyle = {
 			position: 'relative',
 			width: "100%",
 			height: "600px"
-		}, _this._shimStyles = {
+		};
+		_this._shimStyles = {
 			position: 'absolute',
 			zIndex: 2,
 			height: '100%',
@@ -28350,7 +28343,12 @@ var MapContainer = function (_Component) {
 			top: 0,
 			left: 0,
 			cursor: 'wait'
-		}, _temp), _possibleConstructorReturn(_this, _ret);
+		};
+
+		console.log('fetching all data from api');
+		_this.props.dispatch('FETCH_ALL_DATA');
+
+		return _this;
 	}
 
 	_createClass(MapContainer, [{
@@ -28385,36 +28383,31 @@ var MapContainer = function (_Component) {
 		value: function _loadMarkers() {
 			var _this3 = this;
 
-			this.props.markers.forEach(function (marker) {
-				var position = marker.position,
-				    animation = marker.animation;
-
+			console.log('loading markers', this.props);
+			this.props.cachedResults.forEach(function (strike) {
+				console.log(strike);
 				if (!_this3.map) return;
 				_this3.marker = new google.maps.Marker({
-					position: position,
+					strikeData: {
+						country: strike.country,
+						date: strike.date,
+						kills: strike.kills,
+						coords: { lat: strike.lat, lng: strike.lon }
+					},
+					position: { lat: strike.lat, lng: strike.lon },
 					map: _this3.map,
-					animation: google.maps.Animation[animation]
+					animation: google.maps.Animation['DROP']
 				});
 
 				_this3.infoWindow = new google.maps.InfoWindow({
-					content: 'lol'
+					content: '\n\t\t\t\t\t<h3>Location : ' + _this3.marker.strikeData.country + '</h3>\n\t\t\t\t\t<h5>Date : ' + _this3.marker.strikeData.date + '</h5>\n\t\t\t\t\t<h5>Kills : ' + _this3.marker.strikeData.kills + '</h5>\n\t\t\t\t\t<h5>Coords : ' + _this3.marker.strikeData.coords.lat + ' , ' + _this3.marker.strikeData.coords.lng + ' </h5>\n\t\t\t\t'
 				});
 
-				_this3.infoWindow.open(_this3.map, _this3.marker);
-
-				// this.infoWindow.addEventListener('click', () => {
-				//
-				// })
+				_this3.marker.addListener('click', function () {
+					_this3.infoWindow.open(_this3.map, _this3.marker);
+				});
 			});
 		}
-
-		// _loadInfoWindows() {
-		// 	this.infoWindow = new google.maps.InfoWindow({
-		// 		content : this.props.marker.name,
-		// 	})
-		// 	this.infoWindow.open(this.map , this.marker)
-		// }
-
 	}, {
 		key: '_initShimLogic',
 		value: function _initShimLogic() {
@@ -28437,14 +28430,14 @@ var MapContainer = function (_Component) {
 	}, {
 		key: 'componentDidMount',
 		value: function componentDidMount() {
-			this.props.dispatch('FETCH_ALL_DATA');
 			this._loadMap();
 			this._initShimLogic();
 		}
 	}, {
 		key: 'componentWillReceiveProps',
 		value: function componentWillReceiveProps(nextProps) {
-			this._loadMarkers(nextProps);
+			// this._loadMarkers(nextProps)
+			// why need this?
 		}
 	}, {
 		key: 'render',
@@ -28544,7 +28537,6 @@ function updateIndex(oldState, options) {
 }
 
 function updateFilterState(oldState, options) {
-    console.log(oldState, options);
     var country = oldState.country,
         administration = oldState.administration,
         radius = oldState.radius,
@@ -28561,14 +28553,18 @@ function updateFilterState(oldState, options) {
 }
 
 function fetchAll(oldState, options) {
+    console.log('returning all data from api');
     return new Promise(function (resolve, reject) {
         _superagent2.default.get('http://localhost:8001/api/').end(function (err, res) {
             if (err || !res.ok) {
                 reject(err);
                 return;
             }
+            var jsonData = JSON.parse(res.text);
+            var arrayResults = Object.values(jsonData);
             resolve(Object.assign({}, oldState, {
-                cachedResults: JSON.parse(res.text)
+                // cachedResults : JSON.parse(res.text)
+                cachedResults: arrayResults
             }));
         });
     }).catch(function (e) {
@@ -28588,18 +28584,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 var Store = exports.Store = {
     searchOptions: [],
-    cachedResults: null,
+    cachedResults: {},
     center: { lat: 35.996023, lng: 36.784644 },
-    displayAll: true,
-    markers: [{
-        content: 'lol',
-        position: { lat: 35.996023, lng: 56.784644 },
-        animation: "DROP"
-    }, {
-        content: 'hai',
-        position: { lat: 10.996023, lng: -6.784644 },
-        animation: "DROP"
-    }]
+    displayAll: true
 };
 
 /***/ }),
