@@ -98,33 +98,55 @@ export default class MapContainer extends Component {
 
 	_loadMarkers() {
 		console.log('loading markers', this.props);
-		this.props.cachedResults.forEach((strike) => {
-			console.log(strike)
+		this.markers = [];
+		this.infoWindows = [];
+		this.currentOpenWindow = null;
+		this.props.cachedResults.forEach((strike, i) => {
 			if (!this.map) return;
-			this.marker = new google.maps.Marker({
-				strikeData : {
-					country : strike.country,
-					date : strike.date,
-					kills : strike.kills,
-					coords : { lat : strike.lat , lng : strike.lon }
-				},
-				position : { lat : strike.lat, lng : strike.lon },
-				map : this.map,
-				animation: google.maps.Animation['DROP']
-			});
+			setTimeout(() => {
+				const marker = new google.maps.Marker({
+					strikeData : {
+						country : strike.country,
+						date : strike.date,
+						kills : strike.kills,
+						coords : { lat : strike.lat , lng : strike.lon }
+					},
+					position : { lat : strike.lat, lng : strike.lon },
+					map : this.map,
+					animation: google.maps.Animation['DROP']
+				});
 
-			this.infoWindow = new google.maps.InfoWindow({
-				content : `
-					<h3>Location : ${this.marker.strikeData.country}</h3>
-					<h5>Date : ${this.marker.strikeData.date}</h5>
-					<h5>Kills : ${this.marker.strikeData.kills}</h5>
-					<h5>Coords : ${this.marker.strikeData.coords.lat} , ${this.marker.strikeData.coords.lng} </h5>
-				`,
-			})
+				const infoWindow = new google.maps.InfoWindow({
+					content : `
+						<h3>Location : ${marker.strikeData.country}</h3>
+						<h5>Date : ${marker.strikeData.date}</h5>
+						<h5>Kills : ${marker.strikeData.kills}</h5>
+						<h5>Coords : ${marker.strikeData.coords.lat} , ${marker.strikeData.coords.lng} </h5>
+						<h5>
+							<ul class="strikeLinksList">
+								<li class="strikeLink"><a href="#" target="_blank">Link</a></li>
+								<li class="strikeLink"><a href="#" target="_blank">Link</a></li>
+								<li class="strikeLink"><a href="#" target="_blank">Link</a></li>
+							</ul>
+						</h5>
+					`,
+				});
 
-			this.marker.addListener('click', () => {
-				this.infoWindow.open(this.map , this.marker);
-			})
+				marker.addListener('click', () => {
+					if (this.currentOpenWindow) {
+						console.log('currentOpenWindow', this.currentOpenWindow)
+						this.currentOpenWindow.close();
+						this.currentOpenWindow = null;
+					}
+
+					console.log('infoWindows')
+					this.infoWindows[i].open(this.map , marker);
+					this.currentOpenWindow = this.infoWindows[i];
+				})
+
+				this.markers.push(marker)
+				this.infoWindows.push(infoWindow)
+			}, i * 10)
 		})
 	}
 

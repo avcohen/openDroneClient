@@ -28040,7 +28040,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var options = {
     country: [{ key: 'all', text: 'All', value: 'all' }, { key: 'afganistan', text: 'Afganistan', value: 'afganistan' }, { key: 'syria', text: 'Syria', value: 'syria' }, { key: 'yemen', text: 'Yemen', value: 'yemen' }],
-    administration: [{ key: 'all', text: 'All', value: 'all' }, { key: 'bush', text: 'George W. Bush', value: 'bush' }, { key: 'obama', text: 'Barack Obama', value: 'obama' }, { key: 'trump', text: 'Donald Trump', value: 'trump' }]
+    year: [{ key: 'all', text: 'All', value: 'all' }, { key: '2015', text: '2015', value: 2015 }, { key: '2016', text: '2016', value: 2016 }, { key: '2017', text: '2017', value: 2017 }]
 };
 
 var Filters = function (_Component) {
@@ -28066,7 +28066,7 @@ var Filters = function (_Component) {
 
         _this.state = {
             country: "all",
-            administration: "all",
+            year: "all",
             radius: null,
             filterByRadius: false
             // this.handleChange = this.handleChange.bind(this);
@@ -28082,8 +28082,8 @@ var Filters = function (_Component) {
                 _react2.default.createElement(
                     _semanticUiReact.Form.Group,
                     { widths: 'equal' },
-                    _react2.default.createElement(_semanticUiReact.Form.Select, { name: 'country', label: 'Country', options: options.country, placeholder: 'All', onChange: this.handleChange }),
-                    _react2.default.createElement(_semanticUiReact.Form.Select, { label: 'Administration', options: options.administration, placeholder: 'All', onChange: this.handleChange }),
+                    _react2.default.createElement(_semanticUiReact.Form.Select, { name: 'Country', label: 'Country', options: options.country, placeholder: 'All', onChange: this.handleChange }),
+                    _react2.default.createElement(_semanticUiReact.Form.Select, { name: 'Year', label: 'Year', options: options.year, placeholder: 'All', onChange: this.handleChange }),
                     _react2.default.createElement(
                         _semanticUiReact.Form.Group,
                         null,
@@ -28384,28 +28384,43 @@ var MapContainer = function (_Component) {
 			var _this3 = this;
 
 			console.log('loading markers', this.props);
-			this.props.cachedResults.forEach(function (strike) {
-				console.log(strike);
+			this.markers = [];
+			this.infoWindows = [];
+			this.currentOpenWindow = null;
+			this.props.cachedResults.forEach(function (strike, i) {
 				if (!_this3.map) return;
-				_this3.marker = new google.maps.Marker({
-					strikeData: {
-						country: strike.country,
-						date: strike.date,
-						kills: strike.kills,
-						coords: { lat: strike.lat, lng: strike.lon }
-					},
-					position: { lat: strike.lat, lng: strike.lon },
-					map: _this3.map,
-					animation: google.maps.Animation['DROP']
-				});
+				setTimeout(function () {
+					var marker = new google.maps.Marker({
+						strikeData: {
+							country: strike.country,
+							date: strike.date,
+							kills: strike.kills,
+							coords: { lat: strike.lat, lng: strike.lon }
+						},
+						position: { lat: strike.lat, lng: strike.lon },
+						map: _this3.map,
+						animation: google.maps.Animation['DROP']
+					});
 
-				_this3.infoWindow = new google.maps.InfoWindow({
-					content: '\n\t\t\t\t\t<h3>Location : ' + _this3.marker.strikeData.country + '</h3>\n\t\t\t\t\t<h5>Date : ' + _this3.marker.strikeData.date + '</h5>\n\t\t\t\t\t<h5>Kills : ' + _this3.marker.strikeData.kills + '</h5>\n\t\t\t\t\t<h5>Coords : ' + _this3.marker.strikeData.coords.lat + ' , ' + _this3.marker.strikeData.coords.lng + ' </h5>\n\t\t\t\t'
-				});
+					var infoWindow = new google.maps.InfoWindow({
+						content: '\n\t\t\t\t\t\t<h3>Location : ' + marker.strikeData.country + '</h3>\n\t\t\t\t\t\t<h5>Date : ' + marker.strikeData.date + '</h5>\n\t\t\t\t\t\t<h5>Kills : ' + marker.strikeData.kills + '</h5>\n\t\t\t\t\t\t<h5>Coords : ' + marker.strikeData.coords.lat + ' , ' + marker.strikeData.coords.lng + ' </h5>\n\t\t\t\t\t\t<h5>\n\t\t\t\t\t\t\t<ul class="strikeLinksList">\n\t\t\t\t\t\t\t\t<li class="strikeLink"><a href="#" target="_blank">Link</a></li>\n\t\t\t\t\t\t\t\t<li class="strikeLink"><a href="#" target="_blank">Link</a></li>\n\t\t\t\t\t\t\t\t<li class="strikeLink"><a href="#" target="_blank">Link</a></li>\n\t\t\t\t\t\t\t</ul>\n\t\t\t\t\t\t</h5>\n\t\t\t\t\t'
+					});
 
-				_this3.marker.addListener('click', function () {
-					_this3.infoWindow.open(_this3.map, _this3.marker);
-				});
+					marker.addListener('click', function () {
+						if (_this3.currentOpenWindow) {
+							console.log('currentOpenWindow', _this3.currentOpenWindow);
+							_this3.currentOpenWindow.close();
+							_this3.currentOpenWindow = null;
+						}
+
+						console.log('infoWindows');
+						_this3.infoWindows[i].open(_this3.map, marker);
+						_this3.currentOpenWindow = _this3.infoWindows[i];
+					});
+
+					_this3.markers.push(marker);
+					_this3.infoWindows.push(infoWindow);
+				}, i * 10);
 			});
 		}
 	}, {

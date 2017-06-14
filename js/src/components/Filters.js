@@ -9,21 +9,21 @@ const options = {
         { key: 'syria', text: 'Syria', value: 'syria' },
         { key: 'yemen', text: 'Yemen', value: 'yemen' },
     ],
-    administration : [
+    year : [
         { key : 'all', text: 'All', value : 'all'},
-        { key : 'bush', text: 'George W. Bush', value : 'bush'},
-        { key : 'obama', text: 'Barack Obama', value : 'obama'},
-        { key : 'trump', text: 'Donald Trump', value : 'trump'},
+        { key : '2015', text: '2015', value : 2015 },
+        { key : '2016', text: '2016', value : 2016 },
+        { key : '2017', text: '2017', value : 2017 },
     ]
 }
 
 export default class Filters extends Component {
-
+    
     constructor(props){
         super(props)
         this.state = {
             country : "all",
-            administration : "all",
+            year : "all",
             radius : null,
             filterByRadius : false,
         }
@@ -43,8 +43,8 @@ export default class Filters extends Component {
         return (
             <Form>
                 <Form.Group widths='equal'>
-                    <Form.Select name="country" label="Country" options={options.country} placeholder="All" onChange={this.handleChange} />
-                    <Form.Select label="Administration" options={options.administration} placeholder="All" onChange={this.handleChange} />
+                    <Form.Select name="Country" label="Country" options={options.country} placeholder="All" onChange={this.handleChange} />
+                    <Form.Select name="Year" label="Year" options={options.year} placeholder="All" onChange={this.handleChange} />
                         <Form.Group>
                             <Form.Checkbox label="Filter By Radius" checked={ this.state.filterByRadius } onChange={this.handleChange} />
                             <Form.Input label="Lat / Long" placeholder="-51.1245,12.3345" onChange={this.handleChange} />
