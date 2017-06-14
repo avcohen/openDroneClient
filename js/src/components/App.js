@@ -8,7 +8,8 @@ export default class App extends Component {
     constructor(props){
         super(props)
     }
-    componentDidMount(){}
+    componentDidMount(){
+    }
 
     componentWillReceiveProps(){}
 
@@ -16,7 +17,7 @@ export default class App extends Component {
         return (
             <div>
                 <Header {...this.props} />
-                <Filters {...this.props} {...this.state} />
+                <Filters {...this.props} />
                 <MapContainer {...this.props} apiKey={"AIzaSyCgnmah1dhhXHZBFOj4z3CTuGxaatp0htE"} />
                 <Footer {...this.props} />
             </div>

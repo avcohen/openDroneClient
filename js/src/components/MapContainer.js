@@ -47,13 +47,19 @@ const loadMap = (domNode, options = {}) => new google.maps.Map(domNode, Object.a
 
 
 
+const filterStrikes = {
+	byCountry : (data, country) => {},
+	byYear : (data, year) => {},
+	byRadius : (data, origin, distance) => {},
+}
+
+
 export default class MapContainer extends Component {
 
 	constructor(props){
 		super(props);
 		console.log('fetching all data from api')
 		this.props.dispatch('FETCH_ALL_DATA');
-
 	}
 
     state = {
@@ -173,9 +179,14 @@ export default class MapContainer extends Component {
         this._initShimLogic();
     }
 
-	componentWillReceiveProps(nextProps) {
-		// this._loadMarkers(nextProps)
-		// why need this?
+	// componentWillReceiveProps(nextProps) {
+	// 	if (this.props != nextProps){
+	// 		this.setState();
+	// 	}
+	// }
+
+	componentWillUpdate(){
+
 	}
 
     render(){
@@ -192,7 +203,6 @@ export default class MapContainer extends Component {
 	renderMarkers(){
 			const {mapLoaded} = this.state;
 			if (!mapLoaded) return null;
-			// console.log(this.props.children)
 			const {children} = this.props;
 			const {Children, cloneElement} = React;
 			return Children.map(children, (child) => cloneElement(child, {

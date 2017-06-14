@@ -14,7 +14,7 @@ export default class Main extends Component {
 	}
 
     componentWillReceiveProps(){
-        this.dispatch('FETCH_ALL_DATA')
+        // this.dispatch('FETCH_ALL_DATA')
     }
 
 	render() {

@@ -27908,7 +27908,7 @@ var Main = function (_Component) {
 	}, {
 		key: 'componentWillReceiveProps',
 		value: function componentWillReceiveProps() {
-			this.dispatch('FETCH_ALL_DATA');
+			// this.dispatch('FETCH_ALL_DATA')
 		}
 	}, {
 		key: 'render',
@@ -27995,7 +27995,7 @@ var App = function (_Component) {
                 'div',
                 null,
                 _react2.default.createElement(_Header2.default, this.props),
-                _react2.default.createElement(_Filters2.default, _extends({}, this.props, this.state)),
+                _react2.default.createElement(_Filters2.default, this.props),
                 _react2.default.createElement(_MapContainer2.default, _extends({}, this.props, { apiKey: "AIzaSyCgnmah1dhhXHZBFOj4z3CTuGxaatp0htE" })),
                 _react2.default.createElement(_Footer2.default, this.props)
             );
@@ -28032,6 +28032,8 @@ var _semanticUiReact = __webpack_require__(214);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -28049,28 +28051,47 @@ var Filters = function (_Component) {
     function Filters(props) {
         _classCallCheck(this, Filters);
 
+        // this.handleChange = this.handleChange.bind(this);
         var _this = _possibleConstructorReturn(this, (Filters.__proto__ || Object.getPrototypeOf(Filters)).call(this, props));
+
+        _this.state = {
+            country: null,
+            year: null,
+            filterByRadius: false,
+            radius: null,
+            origin: {
+                lat: null,
+                lng: null
+            }
+        };
 
         _this.handleChange = function (e, _ref) {
             var name = _ref.name,
-                value = _ref.value;
+                value = _ref.value,
+                checked = _ref.checked;
 
-            console.log(name, value
-            // ***
-            // HOW TO ACCESS PROPS OF ITEMS CLICKED? REF? WHUT....
-            // ***
-
-            // this.setState({ value })
-            );
+            // console.log(checked, name, value)
+            if (name === 'origin') {
+                var latLngString = value.replace(/\s/g, '');
+                var latLngArr = latLngString.split(',');
+                _this.setState({
+                    origin: {
+                        lat: latLngArr[0],
+                        lngt: latLngArr[1]
+                    }
+                });
+            } else {
+                _this.setState(_defineProperty({}, name, name === 'filterByRadius' ? checked : value));
+            }
         };
 
-        _this.state = {
-            country: "all",
-            year: "all",
-            radius: null,
-            filterByRadius: false
-            // this.handleChange = this.handleChange.bind(this);
-        };return _this;
+        _this.handleSubmit = function (e) {
+            console.log('new state submitted : ', _this.state);
+            _this.props.dispatch('UPDATE_FILTERS', _this.state);
+            e.preventDefault();
+        };
+
+        return _this;
     }
 
     _createClass(Filters, [{
@@ -28082,15 +28103,20 @@ var Filters = function (_Component) {
                 _react2.default.createElement(
                     _semanticUiReact.Form.Group,
                     { widths: 'equal' },
-                    _react2.default.createElement(_semanticUiReact.Form.Select, { name: 'Country', label: 'Country', options: options.country, placeholder: 'All', onChange: this.handleChange }),
-                    _react2.default.createElement(_semanticUiReact.Form.Select, { name: 'Year', label: 'Year', options: options.year, placeholder: 'All', onChange: this.handleChange }),
+                    _react2.default.createElement(_semanticUiReact.Form.Select, { name: 'country', label: 'Country', options: options.country, placeholder: 'All', onChange: this.handleChange }),
+                    _react2.default.createElement(_semanticUiReact.Form.Select, { name: 'year', label: 'Year', options: options.year, placeholder: 'All', onChange: this.handleChange }),
                     _react2.default.createElement(
                         _semanticUiReact.Form.Group,
                         null,
-                        _react2.default.createElement(_semanticUiReact.Form.Checkbox, { label: 'Filter By Radius', checked: this.state.filterByRadius, onChange: this.handleChange }),
-                        _react2.default.createElement(_semanticUiReact.Form.Input, { label: 'Lat / Long', placeholder: '-51.1245,12.3345', onChange: this.handleChange }),
-                        _react2.default.createElement(_semanticUiReact.Form.Input, { label: 'Distance (KM)', onChange: this.handleChange })
+                        _react2.default.createElement(_semanticUiReact.Form.Checkbox, { name: 'filterByRadius', label: 'Filter By Radius', onChange: this.handleChange }),
+                        _react2.default.createElement(_semanticUiReact.Form.Input, { name: 'origin', label: 'Lat / Long', placeholder: '-51.1245, 12.3345', onChange: this.handleChange }),
+                        _react2.default.createElement(_semanticUiReact.Form.Input, { name: 'radius', label: 'Distance (KM)', onChange: this.handleChange })
                     )
+                ),
+                _react2.default.createElement(
+                    _semanticUiReact.Form.Button,
+                    { onClick: this.handleSubmit },
+                    'Filter'
                 )
             );
         }
@@ -28317,6 +28343,12 @@ var loadMap = function loadMap(domNode) {
 	}, options));
 };
 
+var filterStrikes = {
+	byCountry: function byCountry(data, country) {},
+	byYear: function byYear(data, year) {},
+	byRadius: function byRadius(data, origin, distance) {}
+};
+
 var MapContainer = function (_Component) {
 	_inherits(MapContainer, _Component);
 
@@ -28347,7 +28379,6 @@ var MapContainer = function (_Component) {
 
 		console.log('fetching all data from api');
 		_this.props.dispatch('FETCH_ALL_DATA');
-
 		return _this;
 	}
 
@@ -28448,12 +28479,16 @@ var MapContainer = function (_Component) {
 			this._loadMap();
 			this._initShimLogic();
 		}
+
+		// componentWillReceiveProps(nextProps) {
+		// 	if (this.props != nextProps){
+		// 		this.setState();
+		// 	}
+		// }
+
 	}, {
-		key: 'componentWillReceiveProps',
-		value: function componentWillReceiveProps(nextProps) {
-			// this._loadMarkers(nextProps)
-			// why need this?
-		}
+		key: 'componentWillUpdate',
+		value: function componentWillUpdate() {}
 	}, {
 		key: 'render',
 		value: function render() {
@@ -28476,7 +28511,6 @@ var MapContainer = function (_Component) {
 			var mapLoaded = this.state.mapLoaded;
 
 			if (!mapLoaded) return null;
-			// console.log(this.props.children)
 			var children = this.props.children;
 			var Children = _react2.default.Children,
 			    cloneElement = _react2.default.cloneElement;
@@ -28510,11 +28544,11 @@ exports.actions = undefined;
 var _reducers = __webpack_require__(437);
 
 var actions = exports.actions = {
-	'UPDATE_IDX': function UPDATE_IDX(oldStore, options) {
-		return (0, _reducers.updateIndex)(oldStore, options);
-	},
 	'FETCH_ALL_DATA': function FETCH_ALL_DATA(oldStore, options) {
 		return (0, _reducers.fetchAll)(oldStore, options);
+	},
+	'FILTER_STRIKES': function FILTER_STRIKES(oldStore, options) {
+		return (0, _reducers.fetchFilteredStrikes)(oldStore, options);
 	},
 	'UPDATE_FILTERS': function UPDATE_FILTERS(oldStore, options) {
 		return (0, _reducers.updateFilterState)(oldStore, options);
@@ -28531,7 +28565,7 @@ var actions = exports.actions = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.updateIndex = updateIndex;
+exports.fetchFilteredStrikes = fetchFilteredStrikes;
 exports.updateFilterState = updateFilterState;
 exports.fetchAll = fetchAll;
 
@@ -28541,28 +28575,14 @@ var _superagent2 = _interopRequireDefault(_superagent);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function updateIndex(oldState, options) {
-    var index = oldState.index;
-
-    return Promise.resolve().then(function (_) {
-        return Object.assign({}, oldState, {
-            index: index + 1
-        });
-    });
+function fetchFilteredStrikes(oldState, options) {
+    //
 }
 
 function updateFilterState(oldState, options) {
-    var country = oldState.country,
-        administration = oldState.administration,
-        radius = oldState.radius,
-        filterByRadius = oldState.filterByRadius;
-
     return Promise.resolve().then(function (_) {
         return Object.assign({}, oldState, {
-            country: options.country,
-            administration: options.administration,
-            radius: options.radius,
-            filterByRadius: options.filterByRadius
+            searchOptions: options
         });
     });
 }
@@ -28578,7 +28598,6 @@ function fetchAll(oldState, options) {
             var jsonData = JSON.parse(res.text);
             var arrayResults = Object.values(jsonData);
             resolve(Object.assign({}, oldState, {
-                // cachedResults : JSON.parse(res.text)
                 cachedResults: arrayResults
             }));
         });
@@ -28598,7 +28617,8 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 var Store = exports.Store = {
-    searchOptions: [],
+    searchOptions: {},
+    filteredResults: {},
     cachedResults: {},
     center: { lat: 35.996023, lng: 36.784644 },
     displayAll: true

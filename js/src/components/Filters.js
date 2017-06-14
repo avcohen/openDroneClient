@@ -18,39 +18,62 @@ const options = {
 }
 
 export default class Filters extends Component {
-    
+
+    state = {
+        country : null,
+        year : null,
+        filterByRadius : false,
+        radius : null,
+        origin : {
+            lat : null,
+            lng : null,
+        }
+    }
+
     constructor(props){
         super(props)
-        this.state = {
-            country : "all",
-            year : "all",
-            radius : null,
-            filterByRadius : false,
-        }
         // this.handleChange = this.handleChange.bind(this);
     }
 
-    handleChange = (e, {name, value}) => {
-        console.log(name, value)
-        // ***
-        // HOW TO ACCESS PROPS OF ITEMS CLICKED? REF? WHUT....
-        // ***
+    handleChange = (e, {name, value, checked}) => {
+        // console.log(checked, name, value)
+        if (name === 'origin') {
+            const latLngString = value.replace(/\s/g,'');
+            const latLngArr = latLngString.split(',');
+            this.setState({
+                origin : {
+                    lat : latLngArr[0],
+                    lngt : latLngArr[1],
+                }
+            })
+        }
+        else {
+            this.setState({
+                [name] : name === 'filterByRadius' ? checked : value,
+            })
+        }
+    }
 
-        // this.setState({ value })
+
+    handleSubmit = (e) => {
+        console.log('new state submitted : ', this.state)
+        this.props.dispatch('UPDATE_FILTERS', this.state);
+        e.preventDefault();
     }
 
     render() {
         return (
             <Form>
                 <Form.Group widths='equal'>
-                    <Form.Select name="Country" label="Country" options={options.country} placeholder="All" onChange={this.handleChange} />
-                    <Form.Select name="Year" label="Year" options={options.year} placeholder="All" onChange={this.handleChange} />
+                    <Form.Select name="country" label="Country" options={options.country} placeholder="All" onChange={this.handleChange} />
+                    <Form.Select name="year" label="Year" options={options.year} placeholder="All" onChange={this.handleChange} />
                         <Form.Group>
-                            <Form.Checkbox label="Filter By Radius" checked={ this.state.filterByRadius } onChange={this.handleChange} />
-                            <Form.Input label="Lat / Long" placeholder="-51.1245,12.3345" onChange={this.handleChange} />
-                            <Form.Input label="Distance (KM)" onChange={this.handleChange} />
+                            <Form.Checkbox name="filterByRadius" label="Filter By Radius" onChange={this.handleChange} />
+                            <Form.Input name="origin" label="Lat / Long" placeholder="-51.1245, 12.3345" onChange={this.handleChange} />
+                            <Form.Input name="radius" label="Distance (KM)" onChange={this.handleChange} />
                         </Form.Group>
                 </Form.Group>
+                <Form.Button onClick={this.handleSubmit} >Filter</Form.Button>
             </Form>
         );
     };

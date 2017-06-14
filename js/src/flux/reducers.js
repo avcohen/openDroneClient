@@ -1,22 +1,14 @@
 import request from 'superagent';
 
-export function updateIndex(oldState, options) {
-    const {index} = oldState;
-    return Promise.resolve().then(_ => {
-        return Object.assign({}, oldState, {
-            index: index + 1,
-        });
-    });
+
+export function fetchFilteredStrikes(oldState, options){
+    //
 }
 
 export function updateFilterState(oldState, options) {
-    const { country, administration, radius, filterByRadius} = oldState
     return Promise.resolve().then( _ => {
         return Object.assign({}, oldState, {
-            country : options.country,
-            administration : options.administration,
-            radius : options.radius,
-            filterByRadius : options.filterByRadius,
+            searchOptions : options
         })
     })
 }
@@ -34,7 +26,6 @@ export function fetchAll(oldState, options) {
                 const jsonData = JSON.parse(res.text);
                 const arrayResults = Object.values(jsonData);
                 resolve(Object.assign({}, oldState, {
-                    // cachedResults : JSON.parse(res.text)
                     cachedResults : arrayResults
                 }))
             })
