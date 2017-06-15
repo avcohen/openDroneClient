@@ -1,9 +1,21 @@
 import request from 'superagent';
 
 
-export function fetchFilteredStrikes(oldState, options){
-    //
-}
+export function filterStrikes(oldState, filterParams) {
+    console.log('ok')
+        return new Promise((resolve, reject) => {
+
+            // NEEDS ADDIIOTN OF DISTANCE BY KM CALCULATING RADIUS
+            const filteredStrikes = oldState.cachedResults.filter((strike) => {
+                                        return strike.country.toUpperCase() === filterParams.country.toUpperCase()
+                                    });
+            console.log(filteredStrikes)
+            resolve(Object.assign({}, oldState, {
+                filteredResults : filteredStrikes
+            }));
+        })
+        .catch(e => console.log(e));
+};
 
 export function updateFilterState(oldState, options) {
     return Promise.resolve().then( _ => {
@@ -11,7 +23,7 @@ export function updateFilterState(oldState, options) {
             searchOptions : options
         })
     })
-}
+};
 
 export function fetchAll(oldState, options) {
     console.log('returning all data from api')
@@ -31,4 +43,4 @@ export function fetchAll(oldState, options) {
             })
     })
     .catch(e => console.log(e));
-}
+};

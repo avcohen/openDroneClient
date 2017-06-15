@@ -28088,6 +28088,7 @@ var Filters = function (_Component) {
         _this.handleSubmit = function (e) {
             console.log('new state submitted : ', _this.state);
             _this.props.dispatch('UPDATE_FILTERS', _this.state);
+            _this.props.dispatch('FILTER_STRIKES', _this.state);
             e.preventDefault();
         };
 
@@ -28343,12 +28344,6 @@ var loadMap = function loadMap(domNode) {
 	}, options));
 };
 
-var filterStrikes = {
-	byCountry: function byCountry(data, country) {},
-	byYear: function byYear(data, year) {},
-	byRadius: function byRadius(data, origin, distance) {}
-};
-
 var MapContainer = function (_Component) {
 	_inherits(MapContainer, _Component);
 
@@ -28439,12 +28434,12 @@ var MapContainer = function (_Component) {
 
 					marker.addListener('click', function () {
 						if (_this3.currentOpenWindow) {
-							console.log('currentOpenWindow', _this3.currentOpenWindow);
+							// console.log('currentOpenWindow', this.currentOpenWindow)
 							_this3.currentOpenWindow.close();
 							_this3.currentOpenWindow = null;
 						}
 
-						console.log('infoWindows');
+						// console.log('infoWindows')
 						_this3.infoWindows[i].open(_this3.map, marker);
 						_this3.currentOpenWindow = _this3.infoWindows[i];
 					});
@@ -28479,16 +28474,6 @@ var MapContainer = function (_Component) {
 			this._loadMap();
 			this._initShimLogic();
 		}
-
-		// componentWillReceiveProps(nextProps) {
-		// 	if (this.props != nextProps){
-		// 		this.setState();
-		// 	}
-		// }
-
-	}, {
-		key: 'componentWillUpdate',
-		value: function componentWillUpdate() {}
 	}, {
 		key: 'render',
 		value: function render() {
@@ -28548,7 +28533,7 @@ var actions = exports.actions = {
 		return (0, _reducers.fetchAll)(oldStore, options);
 	},
 	'FILTER_STRIKES': function FILTER_STRIKES(oldStore, options) {
-		return (0, _reducers.fetchFilteredStrikes)(oldStore, options);
+		return (0, _reducers.filterStrikes)(oldStore, options);
 	},
 	'UPDATE_FILTERS': function UPDATE_FILTERS(oldStore, options) {
 		return (0, _reducers.updateFilterState)(oldStore, options);
@@ -28565,7 +28550,7 @@ var actions = exports.actions = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.fetchFilteredStrikes = fetchFilteredStrikes;
+exports.filterStrikes = filterStrikes;
 exports.updateFilterState = updateFilterState;
 exports.fetchAll = fetchAll;
 
@@ -28575,9 +28560,22 @@ var _superagent2 = _interopRequireDefault(_superagent);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function fetchFilteredStrikes(oldState, options) {
-    //
-}
+function filterStrikes(oldState, filterParams) {
+    console.log('ok');
+    return new Promise(function (resolve, reject) {
+
+        // NEEDS ADDIIOTN OF DISTANCE BY KM CALCULATING RADIUS
+        var filteredStrikes = oldState.cachedResults.filter(function (strike) {
+            return strike.country.toUpperCase() === filterParams.country.toUpperCase();
+        });
+        console.log(filteredStrikes);
+        resolve(Object.assign({}, oldState, {
+            filteredResults: filteredStrikes
+        }));
+    }).catch(function (e) {
+        return console.log(e);
+    });
+};
 
 function updateFilterState(oldState, options) {
     return Promise.resolve().then(function (_) {
@@ -28585,7 +28583,7 @@ function updateFilterState(oldState, options) {
             searchOptions: options
         });
     });
-}
+};
 
 function fetchAll(oldState, options) {
     console.log('returning all data from api');
@@ -28604,7 +28602,7 @@ function fetchAll(oldState, options) {
     }).catch(function (e) {
         return console.log(e);
     });
-}
+};
 
 /***/ }),
 /* 438 */

@@ -54,10 +54,10 @@ export default class Filters extends Component {
         }
     }
 
-
     handleSubmit = (e) => {
-        console.log('new state submitted : ', this.state)
+        console.log('new state submitted : ', this.state);
         this.props.dispatch('UPDATE_FILTERS', this.state);
+        this.props.dispatch('FILTER_STRIKES', this.state);
         e.preventDefault();
     }
 

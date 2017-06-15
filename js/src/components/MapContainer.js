@@ -46,14 +46,6 @@ const loadMap = (domNode, options = {}) => new google.maps.Map(domNode, Object.a
 }, options));
 
 
-
-const filterStrikes = {
-	byCountry : (data, country) => {},
-	byYear : (data, year) => {},
-	byRadius : (data, origin, distance) => {},
-}
-
-
 export default class MapContainer extends Component {
 
 	constructor(props){
@@ -140,12 +132,12 @@ export default class MapContainer extends Component {
 
 				marker.addListener('click', () => {
 					if (this.currentOpenWindow) {
-						console.log('currentOpenWindow', this.currentOpenWindow)
+						// console.log('currentOpenWindow', this.currentOpenWindow)
 						this.currentOpenWindow.close();
 						this.currentOpenWindow = null;
 					}
 
-					console.log('infoWindows')
+					// console.log('infoWindows')
 					this.infoWindows[i].open(this.map , marker);
 					this.currentOpenWindow = this.infoWindows[i];
 				})
@@ -178,16 +170,6 @@ export default class MapContainer extends Component {
         this._loadMap();
         this._initShimLogic();
     }
-
-	// componentWillReceiveProps(nextProps) {
-	// 	if (this.props != nextProps){
-	// 		this.setState();
-	// 	}
-	// }
-
-	componentWillUpdate(){
-
-	}
 
     render(){
         const { _wrapStyle , _shimStyles } = this
