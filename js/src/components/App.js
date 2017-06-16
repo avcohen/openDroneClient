@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
-import MapContainer from './MapContainer';
 import Filters from './Filters';
 import Footer from './Footer';
 import Header from './Header';
+import MapContainer from './MapContainer';
+import { Menu } from 'semantic-ui-react';
 
+// make filters component parent of MapContainer and future ListContianer??
+//
 export default class App extends Component {
     constructor(props){
         super(props)
     }
-    componentDidMount(){
-    }
-
-    componentWillReceiveProps(){}
 
     render() {
         return (

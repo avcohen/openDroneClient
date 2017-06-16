@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import request from 'superagent';
 
-
 const generateRandomFunc = (functionRoot, cb = function(){}) => {
 	const functionName = `${functionRoot}_${Date.now()}`;
 	window[functionName] = (overrideCb = null) => {
@@ -45,20 +44,21 @@ const loadMap = (domNode, options = {}) => new google.maps.Map(domNode, Object.a
 	zoom: 3,
 }, options));
 
-
 export default class MapContainer extends Component {
 
 	constructor(props){
 		super(props);
-		console.log('fetching all data from api')
+		// console.log('fetching all data from api')
 		this.props.dispatch('FETCH_ALL_DATA');
-	}
 
-    state = {
-        mapLoaded : false,
-		markersLoaded : false,
-        mapUrl : 'https://maps.googleapis.com/maps/api/js'
-    }
+		this.state = {
+			strikeData : this.props.cachedResults,
+			filtered : false,
+			mapLoaded : false,
+			markersLoaded : false,
+			mapUrl : 'https://maps.googleapis.com/maps/api/js'
+		}
+	}
 
     _wrapStyle = {
         position: 'relative',
@@ -94,14 +94,18 @@ export default class MapContainer extends Component {
     }
 
 
-	_loadMarkers() {
-		console.log('loading markers', this.props);
+	_loadMarkers(props = this.props) {
+		if (this.markers && this.markers.length) {
+			this.markers.forEach(marker => marker.setMap(null))
+		}
 		this.markers = [];
 		this.infoWindows = [];
 		this.currentOpenWindow = null;
-		this.props.cachedResults.forEach((strike, i) => {
+		const {cachedResults, filteredResults} = props;
+		const dataToLoad = (filteredResults.length === 0) ? cachedResults : filteredResults;
+		dataToLoad.forEach((strike, i) => {
 			if (!this.map) return;
-			setTimeout(() => {
+			// setTimeout(() => {
 				const marker = new google.maps.Marker({
 					strikeData : {
 						country : strike.country,
@@ -132,19 +136,16 @@ export default class MapContainer extends Component {
 
 				marker.addListener('click', () => {
 					if (this.currentOpenWindow) {
-						// console.log('currentOpenWindow', this.currentOpenWindow)
 						this.currentOpenWindow.close();
 						this.currentOpenWindow = null;
 					}
-
-					// console.log('infoWindows')
 					this.infoWindows[i].open(this.map , marker);
 					this.currentOpenWindow = this.infoWindows[i];
 				})
 
 				this.markers.push(marker)
 				this.infoWindows.push(infoWindow)
-			}, i * 10)
+			// }, i * 8)
 		})
 	}
 
@@ -157,7 +158,7 @@ export default class MapContainer extends Component {
             timeout = setTimeout(() => {
                 node.style.zIndex = -1;
                 node.style.cursor = 'initial';
-            }, 2000)
+            }, 500)
         });
         root.addEventListener('mouseleave', () => {
             clearTimeout(timeout)
@@ -167,9 +168,15 @@ export default class MapContainer extends Component {
     }
 
     componentDidMount(){
-        this._loadMap();
+		this._loadMap();
         this._initShimLogic();
     }
+
+	componentWillReceiveProps(nextProps) {
+		if (this.props.filteredResults.length !== nextProps.filteredResults.length) {
+			this._loadMarkers(nextProps);
+		}
+	}
 
     render(){
         const { _wrapStyle , _shimStyles } = this

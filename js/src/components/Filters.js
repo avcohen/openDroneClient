@@ -5,7 +5,7 @@ import { Form } from 'semantic-ui-react';
 const options = {
     country : [
         { key : 'all', text: 'All', value : 'all'},
-        { key: 'afganistan', text: 'Afganistan', value: 'afganistan' },
+        { key: 'afganistan', text: 'Afghanistan', value: 'afghanistan' },
         { key: 'syria', text: 'Syria', value: 'syria' },
         { key: 'yemen', text: 'Yemen', value: 'yemen' },
     ],
@@ -19,23 +19,22 @@ const options = {
 
 export default class Filters extends Component {
 
-    state = {
-        country : null,
-        year : null,
-        filterByRadius : false,
-        radius : null,
-        origin : {
-            lat : null,
-            lng : null,
-        }
-    }
-
     constructor(props){
         super(props)
-        // this.handleChange = this.handleChange.bind(this);
+        this.state = {
+            country : null,
+            year : null,
+            filterByRadius : false,
+            radius : null,
+            origin : {
+                lat : null,
+                lng : null,
+            }
+        }
+        this._onFilterChange = this._onFilterChange.bind(this);
     }
 
-    handleChange = (e, {name, value, checked}) => {
+    _onFilterChange = (e, {name, value, checked}) => {
         // console.log(checked, name, value)
         if (name === 'origin') {
             const latLngString = value.replace(/\s/g,'');
@@ -54,10 +53,9 @@ export default class Filters extends Component {
         }
     }
 
-    handleSubmit = (e) => {
-        console.log('new state submitted : ', this.state);
-        this.props.dispatch('UPDATE_FILTERS', this.state);
-        this.props.dispatch('FILTER_STRIKES', this.state);
+    _onFilterSubmit = (e) => {
+        this.props.dispatch('UPDATE_FILTERS', this.state); // not updating props
+        //this.props.dispatch('FILTER_STRIKES', this.state); // seems to be firing before 'FETCH ALL' ?
         e.preventDefault();
     }
 
@@ -65,16 +63,18 @@ export default class Filters extends Component {
         return (
             <Form>
                 <Form.Group widths='equal'>
-                    <Form.Select name="country" label="Country" options={options.country} placeholder="All" onChange={this.handleChange} />
-                    <Form.Select name="year" label="Year" options={options.year} placeholder="All" onChange={this.handleChange} />
+                    <Form.Select name="country" label="Country" options={options.country} placeholder="All" onChange={this._onFilterChange} />
+                    <Form.Select name="year" label="Year" options={options.year} placeholder="All" onChange={this._onFilterChange} />
                         <Form.Group>
-                            <Form.Checkbox name="filterByRadius" label="Filter By Radius" onChange={this.handleChange} />
-                            <Form.Input name="origin" label="Lat / Long" placeholder="-51.1245, 12.3345" onChange={this.handleChange} />
-                            <Form.Input name="radius" label="Distance (KM)" onChange={this.handleChange} />
+                            <Form.Checkbox name="filterByRadius" label="Filter By Radius" onChange={this._onFilterChange} />
+                            <Form.Input name="origin" label="Lat / Long" placeholder="-51.126, 12.331" onChange={this._onFilterChange} />
+                            <Form.Input name="radius" label="Distance (KM)" onChange={this._onFilterChange} />
                         </Form.Group>
                 </Form.Group>
-                <Form.Button onClick={this.handleSubmit} >Filter</Form.Button>
+                <Form.Button onClick={this._onFilterSubmit} >Filter</Form.Button>
             </Form>
         );
     };
-}
+
+
+};

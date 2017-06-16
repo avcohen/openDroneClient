@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import App from '../components/App';
-import {actions} from './actions';
-import {Store} from './store';
+import { actions } from './actions';
+import { Store } from './store';
 
 export default class Main extends Component {
     state = Store
@@ -12,10 +12,6 @@ export default class Main extends Component {
 			this.setState(newStore);
 		});
 	}
-
-    componentWillReceiveProps(){
-        // this.dispatch('FETCH_ALL_DATA')
-    }
 
 	render() {
 		const sharedProps = {
