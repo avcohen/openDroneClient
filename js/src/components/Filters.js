@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Form } from 'semantic-ui-react';
+import Layers from './Layers';
+import { Form, Icon } from 'semantic-ui-react';
 
 const options = {
     country : [
@@ -42,7 +43,7 @@ export default class Filters extends Component {
             this.setState({
                 origin : {
                     lat : latLngArr[0],
-                    lngt : latLngArr[1],
+                    lng : latLngArr[1],
                 }
             })
         }
@@ -61,18 +62,28 @@ export default class Filters extends Component {
 
     render() {
         return (
-            <Form>
-                <Form.Group widths='equal'>
-                    <Form.Select name="country" label="Country" options={options.country} placeholder="All" onChange={this._onFilterChange} />
-                    <Form.Select name="year" label="Year" options={options.year} placeholder="All" onChange={this._onFilterChange} />
-                        <Form.Group>
-                            <Form.Checkbox name="filterByRadius" label="Filter By Radius" onChange={this._onFilterChange} />
-                            <Form.Input name="origin" label="Lat / Long" placeholder="-51.126, 12.331" onChange={this._onFilterChange} />
-                            <Form.Input name="radius" label="Distance (KM)" onChange={this._onFilterChange} />
-                        </Form.Group>
-                </Form.Group>
-                <Form.Button onClick={this._onFilterSubmit} >Filter</Form.Button>
-            </Form>
+            <div>
+                <Form>
+                    <Form.Group widths='equal'>
+                        <Form.Input name="filterName" label="Filter Name" placeholder="Filter Name" onChange={this._onFilterChange} />
+                        <Form.Select name="country" label="Country" options={options.country} placeholder="All" onChange={this._onFilterChange} />
+                        <Form.Select name="year" label="Year" options={options.year} placeholder="All" onChange={this._onFilterChange} />
+                            <Form.Group>
+                                <Form.Checkbox name="filterByRadius" label="Filter By Radius" onChange={this._onFilterChange} />
+                                <Form.Input name="origin" label="Lat / Long" placeholder="-51.126, 12.331" onChange={this._onFilterChange} />
+                                <Form.Input name="radius" label="Distance (KM)" onChange={this._onFilterChange} />
+                            </Form.Group>
+                    </Form.Group>
+                    <Form.Button onClick={this._onFilterSubmit} >Filter</Form.Button>
+                    <Form.Button onClick={this._onFilterSubmit} >Add Layer
+                        <Icon.Group>
+                            <Icon name='filter' />
+                            <Icon corner name='add' />
+                        </Icon.Group>
+                    </Form.Button>
+                </Form>
+                <Layers {...this.props} />
+            </div>
         );
     };
 

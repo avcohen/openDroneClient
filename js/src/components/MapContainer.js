@@ -83,16 +83,41 @@ export default class MapContainer extends Component {
 		// console.log(center, apiKey)
         loadGMapScript(mapUrl, {key: apiKey})
             .then(_ => this.map = loadMap(this.refs.map, {
-				// options
                 center,
             }))
 			.then(_ => this._loadMarkers())
-			// .then(_ => this._loadInfoWindows())
             .then(_ => this.setState({
                 mapLoaded: true,
             }))
     }
 
+	/**
+	 * user clicks filter button, expands filter menu
+	 * user defines filters, clicks add filter
+	 * adds filter layer to filter layer list, adds markers based on filter to map
+	 */
+	// _createNewMarkerLayer(layerProps ){};
+
+
+	_renderFilterRadius(props = this.props){
+		if (!props.searchOptions.filterByRadius) {
+			return;
+		}
+		const filterCircle = new google.maps.Circle({
+			strokeColor : '#FF0000',
+	        strokeOpacity : 0.8,
+	        strokeWeight : 2,
+	        fillColor : '#FF0000',
+	        fillOpacity : 0.35,
+			center: {
+				lat : props.searchOptions.origin.lat,
+				lng : props.searchOptions.origin.lng,
+			},
+			map : this.map,
+			radius : props.searchOptions.radius,
+		})
+		console.log('rendering circle', filterCircle )
+	}
 
 	_loadMarkers(props = this.props) {
 		if (this.markers && this.markers.length) {
@@ -115,7 +140,7 @@ export default class MapContainer extends Component {
 					},
 					position : { lat : strike.lat, lng : strike.lon },
 					map : this.map,
-					animation: google.maps.Animation['DROP']
+					// animation: google.maps.Animation['DROP']
 				});
 
 				const infoWindow = new google.maps.InfoWindow({
@@ -173,8 +198,10 @@ export default class MapContainer extends Component {
     }
 
 	componentWillReceiveProps(nextProps) {
+		this._renderFilterRadius(nextProps)
 		if (this.props.filteredResults.length !== nextProps.filteredResults.length) {
 			this._loadMarkers(nextProps);
+			// this._renderFilterRadius(nextProps)
 		}
 	}
 

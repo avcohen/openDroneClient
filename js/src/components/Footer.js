@@ -7,7 +7,6 @@ export default class Footer extends Component {
         return (
             <footer>
                 <a href="#">contact</a>
-                <a href="#">pgp</a>
             </footer>
         );
     }

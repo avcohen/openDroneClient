@@ -1,5 +1,7 @@
 import request from 'superagent';
 
+
+// improve promisified GET
 const reqGET = (url) => new Promise((resolve, reject) => {
     request
         .get(url)
@@ -30,8 +32,7 @@ export function filterStrikes(oldState, filterParams) {
         .catch(e => console.log(e));
 };
 
-//not maiking it to the props...
-//
+
 export function updateFilterState(oldState, options) {
     return new Promise((resolve, reject) => {
         console.log('update fulter state', options)
@@ -39,7 +40,6 @@ export function updateFilterState(oldState, options) {
         const {lat, lng} = options.origin;
         const baseUrl = 'http://localhost:8001/api/country?q='+country;
         reqGET(baseUrl).then(data => {
-            console.log('1111', data, oldState);
             resolve(Object.assign({}, oldState, {
                 searchOptions : {
                     country,
