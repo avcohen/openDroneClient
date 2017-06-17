@@ -19,23 +19,37 @@ const reqGET = (url) => new Promise((resolve, reject) => {
         });
 });
 
+export function addFilterLayer(oldState, layerParams){
+    console.log(layerParams)
+    const updatedLayerArray = oldState.filterLayers.concat([Object.assign({},layerParams)])
+    console.log(oldState, updatedLayerArray)
+    return new Promise((resolve, reject) => {
+        resolve({...oldState, filterLayers : updatedLayerArray })
+    })
+};
+
+
+export function displayAll(oldState){
+    return new Promise((resolve, reject) => {
+            resolve({...oldState, displayAll : !oldState.displayAll })
+    })
+
+};
+
 export function filterStrikes(oldState, filterParams) {
         return new Promise((resolve, reject) => {
             // NEEDS ADDITION OF DISTANCE BY KM CALCULATING RADIUS
             const filteredStrikes = oldState.cachedResults.filter((strike) => {
                                         return strike.country.toUpperCase() === filterParams.country.toUpperCase()
                                     });
-            resolve(Object.assign({}, oldState, {
-                filteredResults : filteredStrikes
-            }));
+            resolve({...oldState, filteredResults : filteredStrikes });
         })
         .catch(e => console.log(e));
 };
 
-
 export function updateFilterState(oldState, options) {
     return new Promise((resolve, reject) => {
-        console.log('update fulter state', options)
+        // console.log('update fulter state', options)
         const {country, year, filterByRadius, radius, origin} = options;
         const {lat, lng} = options.origin;
         const baseUrl = 'http://localhost:8001/api/country?q='+country;

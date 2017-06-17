@@ -57,14 +57,14 @@ export default class MapContainer extends Component {
 			mapLoaded : false,
 			markersLoaded : false,
 			mapUrl : 'https://maps.googleapis.com/maps/api/js'
-		}
-	}
+		};
+	};
 
     _wrapStyle = {
         position: 'relative',
         width : "100%",
         height : "600px",
-    }
+    };
 
     _shimStyles = {
         position: 'absolute',
@@ -74,7 +74,7 @@ export default class MapContainer extends Component {
         top: 0,
         left: 0,
         cursor: 'wait',
-    }
+    };
 
     _loadMap() {
 		// console.log(this.props)
@@ -89,90 +89,95 @@ export default class MapContainer extends Component {
             .then(_ => this.setState({
                 mapLoaded: true,
             }))
-    }
+    };
 
-	/**
-	 * user clicks filter button, expands filter menu
-	 * user defines filters, clicks add filter
-	 * adds filter layer to filter layer list, adds markers based on filter to map
-	 */
-	// _createNewMarkerLayer(layerProps ){};
+	// _renderFilterRadius(props = this.props){
+	// 	if (!props.searchOptions.filterByRadius) {
+	// 		return;
+	// 	};
+	// 	const filterCircle = new google.maps.Circle({
+	// 		strokeColor : '#FF0000',
+	//         strokeOpacity : 0.8,
+	//         strokeWeight : 2,
+	//         fillColor : '#FF0000',
+	//         fillOpacity : 0.35,
+	// 		center: {
+	// 			lat : props.searchOptions.origin.lat,
+	// 			lng : props.searchOptions.origin.lng,
+	// 		},
+	// 		map : this.map,
+	// 		radius : props.searchOptions.radius,
+	// 	});
+	// 	console.log('rendering circle', filterCircle )
+	// };
 
 
-	_renderFilterRadius(props = this.props){
-		if (!props.searchOptions.filterByRadius) {
-			return;
-		}
-		const filterCircle = new google.maps.Circle({
-			strokeColor : '#FF0000',
-	        strokeOpacity : 0.8,
-	        strokeWeight : 2,
-	        fillColor : '#FF0000',
-	        fillOpacity : 0.35,
-			center: {
-				lat : props.searchOptions.origin.lat,
-				lng : props.searchOptions.origin.lng,
-			},
-			map : this.map,
-			radius : props.searchOptions.radius,
-		})
-		console.log('rendering circle', filterCircle )
-	}
+// inital state loads all markers
+// 	if filter is created, don't display all, only filters with status of active
+
 
 	_loadMarkers(props = this.props) {
+
+		// clears all markers
 		if (this.markers && this.markers.length) {
 			this.markers.forEach(marker => marker.setMap(null))
 		}
+
 		this.markers = [];
 		this.infoWindows = [];
 		this.currentOpenWindow = null;
-		const {cachedResults, filteredResults} = props;
-		const dataToLoad = (filteredResults.length === 0) ? cachedResults : filteredResults;
-		dataToLoad.forEach((strike, i) => {
-			if (!this.map) return;
-			// setTimeout(() => {
-				const marker = new google.maps.Marker({
-					strikeData : {
-						country : strike.country,
-						date : strike.date,
-						kills : strike.kills,
-						coords : { lat : strike.lat , lng : strike.lon }
-					},
-					position : { lat : strike.lat, lng : strike.lon },
-					map : this.map,
-					// animation: google.maps.Animation['DROP']
-				});
 
-				const infoWindow = new google.maps.InfoWindow({
-					content : `
-						<h3>Location : ${marker.strikeData.country}</h3>
-						<h5>Date : ${marker.strikeData.date}</h5>
-						<h5>Kills : ${marker.strikeData.kills}</h5>
-						<h5>Coords : ${marker.strikeData.coords.lat} , ${marker.strikeData.coords.lng} </h5>
-						<h5>
-							<ul class="strikeLinksList">
-								<li class="strikeLink"><a href="#" target="_blank">Link</a></li>
-								<li class="strikeLink"><a href="#" target="_blank">Link</a></li>
-								<li class="strikeLink"><a href="#" target="_blank">Link</a></li>
-							</ul>
-						</h5>
-					`,
-				});
+		const {cachedResults, filteredResults , filterLayers, displayAll } = props;
 
-				marker.addListener('click', () => {
-					if (this.currentOpenWindow) {
-						this.currentOpenWindow.close();
-						this.currentOpenWindow = null;
-					}
-					this.infoWindows[i].open(this.map , marker);
-					this.currentOpenWindow = this.infoWindows[i];
-				})
+		if (props.displayAll) {
+			const dataToLoad = (filteredResults.length === 0) ? cachedResults : filteredResults;
+			dataToLoad.forEach((strike, i) => {
+				if (!this.map) return;
+				// setTimeout(() => {
+					const marker = new google.maps.Marker({
+						strikeData : {
+							country : strike.country,
+							date : strike.date,
+							kills : strike.kills,
+							coords : { lat : strike.lat , lng : strike.lon }
+						},
+						position : { lat : strike.lat, lng : strike.lon },
+						map : this.map,
+						// animation: google.maps.Animation['DROP']
+					});
 
-				this.markers.push(marker)
-				this.infoWindows.push(infoWindow)
-			// }, i * 8)
-		})
-	}
+					const infoWindow = new google.maps.InfoWindow({
+						content : `
+							<h3>Location : ${marker.strikeData.country}</h3>
+							<h5>Date : ${marker.strikeData.date}</h5>
+							<h5>Kills : ${marker.strikeData.kills}</h5>
+							<h5>Coords : ${marker.strikeData.coords.lat} , ${marker.strikeData.coords.lng} </h5>
+							<h5>
+								<ul class="strikeLinksList">
+									<li class="strikeLink"><a href="#" target="_blank">Link</a></li>
+									<li class="strikeLink"><a href="#" target="_blank">Link</a></li>
+									<li class="strikeLink"><a href="#" target="_blank">Link</a></li>
+								</ul>
+							</h5>
+						`,
+					});
+
+					marker.addListener('click', () => {
+						if (this.currentOpenWindow) {
+							this.currentOpenWindow.close();
+							this.currentOpenWindow = null;
+						}
+						this.infoWindows[i].open(this.map , marker);
+						this.currentOpenWindow = this.infoWindows[i];
+					})
+
+					this.markers.push(marker)
+					this.infoWindows.push(infoWindow)
+				// }, i * 8)
+			})
+		}
+		// const dataToLoad = (filteredResults.length === 0) ? cachedResults : filteredResults;
+	};
 
     _initShimLogic() {
         const root = ReactDOM.findDOMNode(this.refs.root);
@@ -190,20 +195,22 @@ export default class MapContainer extends Component {
             node.style.zIndex = 2;
             node.style.cursor = 'wait';
         });
-    }
+    };
 
     componentDidMount(){
 		this._loadMap();
         this._initShimLogic();
-    }
+    };
 
 	componentWillReceiveProps(nextProps) {
-		this._renderFilterRadius(nextProps)
-		if (this.props.filteredResults.length !== nextProps.filteredResults.length) {
-			this._loadMarkers(nextProps);
-			// this._renderFilterRadius(nextProps)
+
+		if (this.props.filteredResults.length !== nextProps.filteredResults.length
+			|| this.props.filterLayers.length !== nextProps.filterLayers.length
+			|| this.props.displayAll !== nextProps.displayAll
+			) {
+				this._loadMarkers(nextProps);
 		}
-	}
+	};
 
     render(){
         const { _wrapStyle , _shimStyles } = this
@@ -214,7 +221,7 @@ export default class MapContainer extends Component {
 				{this.renderMarkers()}
             </div>
         );
-    }
+    };
 
 	renderMarkers(){
 			const {mapLoaded} = this.state;
@@ -225,5 +232,5 @@ export default class MapContainer extends Component {
 				mapLoaded: true,
 				map: this.map,
 			}))
-	}
+	};
 }

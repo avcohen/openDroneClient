@@ -6,38 +6,58 @@ export default class Layers extends Component {
 
     constructor(props){
         super(props);
-
-        this._removeLayer = this._removeLayer.bind(this);
+        this.state = {
+            layersExist : (this.props.filterLayers.length === 0) ? false : true,
+        }
     };
 
-    // _layerContainerStyles = () => {};
+    // _layerContainerStyles = {
+    // };
     //
-    // _layerItemStyles = () => {};
+    // _layerItemStyles = {
+    // };
     //
-    // _loadLayers(){};
+    // _loadLayers(props = this.props){
     //
-    _removeLayer = (e, data) => {
+    // };
+
+    // deletes layer entirely
+    _removeLayer(e, data, i){
         console.log(e, data)
         e.preventDefault();
     }
 
-    // load in layer list
-    // componentDidMount(){};
+    // toggles highlight of label to show is active/inactive, toggles props of current layer to match
+    _toggleLayerVisibility = (e, data) => {
+        console.log(e, data)
+        e.preventDefault();
+    }
 
-    // logic to check length of layer list, refresh if change
-    // componentWillReceiveProps(){};
+    _renderLayerList(props = this.props){
+        // if filter layers array is empty, do nothing
+        if (!this.props.filterLayers.length){
+            return;
+        }
+
+        const layers = this.props.filterLayers;
+
+        // return a label element for each obj in array
+        return layers.map((layer, i) => {
+            console.log('----', layer)
+            return(
+                <Label color="red" onClick={this._toggleLayerVisibility} key={i}>
+                    {layer.filterName}
+                    <Icon name="delete" onClick={(e,data) => this._removeLayer(e, data, i)} />
+                </Label>
+            );
+        })
+    };
+
 
     render(){
-
-
-        //onRemove to delete layer, onclick to isolate visibility of only that layer
         return (
-            <Label color="red">
-                Layer 1
-                <Icon name="delete" onClick={this._removeLayer} />
-            </Label>
-
-
+            <div>{this._renderLayerList()}</div>
         );
     }
+
 };

@@ -23,6 +23,7 @@ export default class Filters extends Component {
     constructor(props){
         super(props)
         this.state = {
+            filterName : null,
             country : null,
             year : null,
             filterByRadius : false,
@@ -55,9 +56,23 @@ export default class Filters extends Component {
     }
 
     _onFilterSubmit = (e) => {
-        this.props.dispatch('UPDATE_FILTERS', this.state); // not updating props
-        //this.props.dispatch('FILTER_STRIKES', this.state); // seems to be firing before 'FETCH ALL' ?
+        this.props.dispatch('UPDATE_FILTERS', this.state);
+        this.props.dispatch('FILTER_STRIKES', this.state);
         e.preventDefault();
+    }
+
+    _addLayer = (e) => {
+        this.props.dispatch('ADD_LAYER', this.state);
+        e.preventDefault();
+    }
+
+    _toggleAll = (e) => {
+        this.props.dispatch('DISPLAY_ALL')
+        e.preventDefault();
+    }
+
+    _toggleButton(){
+        return this.props.displayAll === true ? "Hide All" : "Show All"
     }
 
     render() {
@@ -74,13 +89,16 @@ export default class Filters extends Component {
                                 <Form.Input name="radius" label="Distance (KM)" onChange={this._onFilterChange} />
                             </Form.Group>
                     </Form.Group>
-                    <Form.Button onClick={this._onFilterSubmit} >Filter</Form.Button>
-                    <Form.Button onClick={this._onFilterSubmit} >Add Layer
-                        <Icon.Group>
-                            <Icon name='filter' />
-                            <Icon corner name='add' />
-                        </Icon.Group>
-                    </Form.Button>
+                    <Form.Group widths='equal'>
+                        <Form.Button onClick={this._onFilterSubmit} >Filter</Form.Button>
+                        <Form.Button onClick={this._addLayer} >Add Layer
+                            <Icon.Group>
+                                <Icon name='filter' />
+                                <Icon corner name='add' />
+                            </Icon.Group>
+                        </Form.Button>
+                        <Form.Button onClick={this._toggleAll} >{this._toggleButton()}</Form.Button>
+                    </Form.Group>
                 </Form>
                 <Layers {...this.props} />
             </div>
