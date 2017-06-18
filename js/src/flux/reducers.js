@@ -20,11 +20,9 @@ const reqGET = (url) => new Promise((resolve, reject) => {
 });
 
 export function addFilterLayer(oldState, layerParams){
-    console.log(layerParams)
     const updatedLayerArray = oldState.filterLayers.concat([Object.assign({},layerParams)])
-    console.log(oldState, updatedLayerArray)
     return new Promise((resolve, reject) => {
-        resolve({...oldState, filterLayers : updatedLayerArray })
+        resolve({...oldState, filterLayers : updatedLayerArray, displayAll : false })
     })
 };
 
@@ -90,4 +88,13 @@ export function fetchAll(oldState, options) {
             })
     })
     .catch(e => console.log(e));
+};
+
+export function removeFilterLayer(oldState, index){
+    // splice not working like splice works?
+    const updatedLayerArray = oldState.filterLayers.splice(index , 1)
+
+    return new Promise((resolve, reject) => {
+        resolve({...oldState, filterLayers : [updatedLayerArray] })
+    })
 };

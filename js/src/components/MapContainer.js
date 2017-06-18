@@ -52,7 +52,7 @@ export default class MapContainer extends Component {
 		this.props.dispatch('FETCH_ALL_DATA');
 
 		this.state = {
-			strikeData : this.props.cachedResults,
+			// strikeData : this.props.cachedResults,
 			filtered : false,
 			mapLoaded : false,
 			markersLoaded : false,
@@ -118,6 +118,12 @@ export default class MapContainer extends Component {
 
 	_loadMarkers(props = this.props) {
 
+		const {cachedResults, filteredResults , filterLayers, displayAll } = props;
+
+		filterLayers.map((layer, i) => {
+
+		})
+
 		// clears all markers
 		if (this.markers && this.markers.length) {
 			this.markers.forEach(marker => marker.setMap(null))
@@ -127,7 +133,7 @@ export default class MapContainer extends Component {
 		this.infoWindows = [];
 		this.currentOpenWindow = null;
 
-		const {cachedResults, filteredResults , filterLayers, displayAll } = props;
+
 
 		if (props.displayAll) {
 			const dataToLoad = (filteredResults.length === 0) ? cachedResults : filteredResults;

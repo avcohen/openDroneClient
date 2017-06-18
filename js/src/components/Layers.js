@@ -23,40 +23,49 @@ export default class Layers extends Component {
 
     // deletes layer entirely
     _removeLayer(e, data, i){
-        console.log(e, data)
+        e.stopPropagation();
+        console.log('(_removelayer) removing layer at index : ', i)
+        this.props.dispatch('REMOVE_LAYER', i);
         e.preventDefault();
     }
 
     // toggles highlight of label to show is active/inactive, toggles props of current layer to match
-    _toggleLayerVisibility = (e, data) => {
-        console.log(e, data)
+    _toggleLayerVisibility = (e, data, i) => {
+        // console.log(e, data, i)
         e.preventDefault();
     }
 
     _renderLayerList(props = this.props){
+        const layers = props.filterLayers;
         // if filter layers array is empty, do nothing
-        if (!this.props.filterLayers.length){
-            return;
+        if (props.filterLayers.length === 0){
+            return('');
         }
-
-        const layers = this.props.filterLayers;
 
         // return a label element for each obj in array
         return layers.map((layer, i) => {
-            console.log('----', layer)
             return(
-                <Label color="red" onClick={this._toggleLayerVisibility} key={i}>
-                    {layer.filterName}
-                    <Icon name="delete" onClick={(e,data) => this._removeLayer(e, data, i)} />
-                </Label>
+                <Label
+                    color="red"
+                    content={layer.filterName}
+                    onClick={(e, data) => this._toggleLayerVisibility(e, data, i)}
+                    onRemove={(e,data) => this._removeLayer(e, data, i)}
+                    key={i}
+                />
             );
         })
     };
 
 
+	componentWillReceiveProps(nextProps){
+        if (this.props.filterLayers.length !== nextProps.filterLayers.length){
+            this._renderLayerList(nextProps);
+        }
+    };
+
     render(){
         return (
-            <div>{this._renderLayerList()}</div>
+            <Label.Group size="large">{this._renderLayerList()}</Label.Group>
         );
     }
 

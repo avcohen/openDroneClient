@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import ColorPicker from './ColorPicker'
 import Layers from './Layers';
 import { Form, Icon } from 'semantic-ui-react';
 
@@ -7,6 +8,7 @@ const options = {
     country : [
         { key : 'all', text: 'All', value : 'all'},
         { key: 'afganistan', text: 'Afghanistan', value: 'afghanistan' },
+        { key: 'pakistan', text: 'Pakistan', value: 'pakistan' },
         { key: 'syria', text: 'Syria', value: 'syria' },
         { key: 'yemen', text: 'Yemen', value: 'yemen' },
     ],
@@ -67,7 +69,7 @@ export default class Filters extends Component {
     }
 
     _toggleAll = (e) => {
-        this.props.dispatch('DISPLAY_ALL')
+        this.props.dispatch('DISPLAY_ALL');
         e.preventDefault();
     }
 
@@ -83,14 +85,12 @@ export default class Filters extends Component {
                         <Form.Input name="filterName" label="Filter Name" placeholder="Filter Name" onChange={this._onFilterChange} />
                         <Form.Select name="country" label="Country" options={options.country} placeholder="All" onChange={this._onFilterChange} />
                         <Form.Select name="year" label="Year" options={options.year} placeholder="All" onChange={this._onFilterChange} />
-                            <Form.Group>
-                                <Form.Checkbox name="filterByRadius" label="Filter By Radius" onChange={this._onFilterChange} />
-                                <Form.Input name="origin" label="Lat / Long" placeholder="-51.126, 12.331" onChange={this._onFilterChange} />
-                                <Form.Input name="radius" label="Distance (KM)" onChange={this._onFilterChange} />
-                            </Form.Group>
+                        <Form.Checkbox name="filterByRadius" label="Filter By Radius" onChange={this._onFilterChange} />
+                        <Form.Input name="origin" label="Lat / Long" placeholder="-51.126, 12.331" onChange={this._onFilterChange} />
+                        <Form.Input name="radius" label="Distance (KM)" onChange={this._onFilterChange} />
+                        <Form.Button onClick={this._onFilterSubmit} >Filter</Form.Button>
                     </Form.Group>
                     <Form.Group widths='equal'>
-                        <Form.Button onClick={this._onFilterSubmit} >Filter</Form.Button>
                         <Form.Button onClick={this._addLayer} >Add Layer
                             <Icon.Group>
                                 <Icon name='filter' />
