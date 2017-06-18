@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import ColorPicker from './ColorPicker'
 import Layers from './Layers';
-import { Form, Icon } from 'semantic-ui-react';
+import { Form, Grid, Icon, Menu } from 'semantic-ui-react';
 
 const options = {
     country : [
@@ -25,6 +25,8 @@ export default class Filters extends Component {
     constructor(props){
         super(props)
         this.state = {
+            filterMenuVisible : false,
+            layerMenuVisible : false,
             filterName : null,
             country : null,
             year : null,
@@ -73,32 +75,59 @@ export default class Filters extends Component {
         e.preventDefault();
     }
 
-    _toggleButton(){
-        return this.props.displayAll === true ? "Hide All" : "Show All"
+    _toggleAllMarkerVisibility(){
+        return this.props.displayAll === true ? { icon : "hide" , text : "Hide All", color : "orange" } : {icon : "unhide" , text : "Show All", color : "blue" }
+    }
+
+    _toggleFilterMenuVisibility = (e) => {
+        this.setState({ filterMenuVisible : !this.state.filterMenuVisible });
+        e.preventDefault();
+    }
+
+    _toggleLayerMenuVisibility = (e) => {
+        this.setState({ layerMenuVisible : !this.state.layerMenuVisible });
+        e.preventDefault();
     }
 
     render() {
         return (
             <div>
-                <Form>
-                    <Form.Group widths='equal'>
-                        <Form.Input name="filterName" label="Filter Name" placeholder="Filter Name" onChange={this._onFilterChange} />
-                        <Form.Select name="country" label="Country" options={options.country} placeholder="All" onChange={this._onFilterChange} />
-                        <Form.Select name="year" label="Year" options={options.year} placeholder="All" onChange={this._onFilterChange} />
-                        <Form.Checkbox name="filterByRadius" label="Filter By Radius" onChange={this._onFilterChange} />
-                        <Form.Input name="origin" label="Lat / Long" placeholder="-51.126, 12.331" onChange={this._onFilterChange} />
-                        <Form.Input name="radius" label="Distance (KM)" onChange={this._onFilterChange} />
-                        <Form.Button onClick={this._onFilterSubmit} >Filter</Form.Button>
-                    </Form.Group>
-                    <Form.Group widths='equal'>
-                        <Form.Button onClick={this._addLayer} >Add Layer
-                            <Icon.Group>
-                                <Icon name='filter' />
-                                <Icon corner name='add' />
-                            </Icon.Group>
-                        </Form.Button>
-                        <Form.Button onClick={this._toggleAll} >{this._toggleButton()}</Form.Button>
-                    </Form.Group>
+                <Menu inverted>
+                    <Menu.Item name='Filters' onClick={this._toggleFilterMenuVisibility} >
+                        <Icon name='plus' />
+                        Show Filters
+                    </Menu.Item>
+                    <Menu.Item name='Layers' onClick={this._toggleLayerMenuVisibility} >
+                        <Icon name='plus' />
+                        Show Layers
+                    </Menu.Item>
+                    <Menu.Menu position='right' >
+                        <Menu.Item name='Toggle' onClick={this._toggleAll} color={this._toggleAllMarkerVisibility().color} >
+                            <Icon name={this._toggleAllMarkerVisibility().icon} />
+                            {this._toggleAllMarkerVisibility().text}
+                        </Menu.Item>
+                    </Menu.Menu>
+                </Menu>
+                <Form className={"info message"} >
+                    <Grid divided='vertically'>
+                        <Grid.Row>
+                            <Form.Input name="filterName" label="Filter Name" placeholder="Filter Name" onChange={this._onFilterChange} />
+                            <Form.Select name="country" label="Country" options={options.country} placeholder="All" onChange={this._onFilterChange} />
+                            <Form.Select name="year" label="Year" options={options.year} placeholder="All" onChange={this._onFilterChange} />
+                            <Form.Input name="origin" label="Lat / Long" placeholder="-51.126, 12.331" onChange={this._onFilterChange} />
+                            <Form.Input name="radius" label="Distance (KM)" onChange={this._onFilterChange} />
+                            <Form.Checkbox name="filterByRadius" label="Filter By Radius" onChange={this._onFilterChange} />
+                            <Form.Button onClick={this._onFilterSubmit} >Filter</Form.Button>
+                        </Grid.Row>
+                        <Grid.Row>
+                            <Form.Button onClick={this._addLayer} >Add Layer
+                                <Icon.Group>
+                                    <Icon name='filter' />
+                                    <Icon corner name='add' />
+                                </Icon.Group>
+                            </Form.Button>
+                        </Grid.Row>
+                    </Grid>
                 </Form>
                 <Layers {...this.props} />
             </div>
@@ -107,3 +136,5 @@ export default class Filters extends Component {
 
 
 };
+
+// <Form.Button onClick={this._toggleAll} >{this._toggleAllMarkerVisibility()}</Form.Button>

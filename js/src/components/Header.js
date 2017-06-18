@@ -3,6 +3,7 @@ import { Menu } from 'semantic-ui-react';
 
 export default class Header extends Component {
     state = {
+        activeMenuItem : null,
         menuItems : [
             { key: 'map', name: 'map view' },
             { key: 'listview', name: 'list view' },
@@ -10,12 +11,34 @@ export default class Header extends Component {
         ],
     }
 
-    render() {
+    _renderMenuItems(){
         return (
-            <div>
-                <h1>openDrone 0.1</h1>
-                <Menu items={this.state.menuItems} />
-            </div>
+            this.state.menuItems.map((menuItem) =>
+
+                <Menu.Item
+                    name={menuItem.key}
+                    active={this.state.activeMenuItem === menuItem.key}
+                    onClick={this.handleItemClick}
+                >
+                    {menuItem.name}
+                </Menu.Item>
+            )
+        )
+    }
+
+    render() {
+        const { activeMenuItem } = this.state;
+
+
+
+
+        return (
+            <Menu stackable>
+                <Menu.Item>
+                    <img src='assets/drone.png' />
+                </Menu.Item>
+                {this._renderMenuItems()}
+            </Menu>
         );
     }
 }
