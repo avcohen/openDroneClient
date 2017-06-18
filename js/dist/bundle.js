@@ -29639,6 +29639,12 @@ var Header = function (_Component) {
     }
 
     _createClass(Header, [{
+        key: '_setActiveMenuItem',
+        value: function _setActiveMenuItem(e) {
+            console.log('here', e, name);
+            e.preventDefault();
+        }
+    }, {
         key: '_renderMenuItems',
         value: function _renderMenuItems() {
             var _this2 = this;
@@ -29649,7 +29655,7 @@ var Header = function (_Component) {
                     {
                         name: menuItem.key,
                         active: _this2.state.activeMenuItem === menuItem.key,
-                        onClick: _this2.handleItemClick
+                        onClick: _this2._setActiveMenuItem
                     },
                     menuItem.name
                 );
@@ -30291,7 +30297,7 @@ function updateFilterState(oldState, options) {
 function fetchAll(oldState, options) {
     // console.log('returning all data from api')
     return new Promise(function (resolve, reject) {
-        _superagent2.default.get('http://104.236.214.92:8001/api/').end(function (err, res) {
+        _superagent2.default.get('https://localhost:8443/api/').end(function (err, res) {
             if (err || !res.ok) {
                 reject(err);
                 return;

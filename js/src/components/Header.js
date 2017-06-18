@@ -11,14 +11,19 @@ export default class Header extends Component {
         ],
     }
 
+
+    _setActiveMenuItem(e){
+        console.log('here', e, name )
+        e.preventDefault();
+    }
+
     _renderMenuItems(){
         return (
             this.state.menuItems.map((menuItem) =>
-
                 <Menu.Item
                     name={menuItem.key}
                     active={this.state.activeMenuItem === menuItem.key}
-                    onClick={this.handleItemClick}
+                    onClick={this._setActiveMenuItem}
                 >
                     {menuItem.name}
                 </Menu.Item>
@@ -28,9 +33,6 @@ export default class Header extends Component {
 
     render() {
         const { activeMenuItem } = this.state;
-
-
-
 
         return (
             <div>

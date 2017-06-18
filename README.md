@@ -15,7 +15,7 @@ $ cd openDroneClient
 $ cd js && npm install
 ```
 
-Dronemappr uses the [Google Maps JS API](https://developers.google.com/maps/documentation/javascript/). While a Google Maps API is provided by default and for ease of use, _please_ strictly limit the use of this key and replace it if you intend to utilize this software.
+Dronemappr uses the [Google Maps JS API](https://developers.google.com/maps/documentation/javascript/). While a Google Maps API key is provided by default for ease of use, _please_ strictly limit the use of this key and replace it if you intend to utilize this software.
 
 ## Thanks
 

@@ -75,7 +75,7 @@ export function fetchAll(oldState, options) {
     // console.log('returning all data from api')
     return new Promise((resolve, reject) => {
         request
-            .get('http://104.236.214.92:8001/api/')
+            .get('https://104.236.214.92:8443/api/')
             .end((err,res)=>{
                 if (err || !res.ok){
                     reject(err)
