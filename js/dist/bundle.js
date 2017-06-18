@@ -29232,7 +29232,9 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 // make filters component parent of MapContainer and future ListContianer??
-//
+
+var apiKey = 'AIzaSyCgnmah1dhhXHZBFOj4z3CTuGxaatp0htE';
+
 var App = function (_Component) {
     _inherits(App, _Component);
 
@@ -29250,7 +29252,7 @@ var App = function (_Component) {
                 null,
                 _react2.default.createElement(_Header2.default, this.props),
                 _react2.default.createElement(_Filters2.default, this.props),
-                _react2.default.createElement(_MapContainer2.default, _extends({}, this.props, { apiKey: "AIzaSyCgnmah1dhhXHZBFOj4z3CTuGxaatp0htE" })),
+                _react2.default.createElement(_MapContainer2.default, _extends({}, this.props, { apiKey: apiKey })),
                 _react2.default.createElement(_Footer2.default, this.props)
             );
         }
@@ -29660,14 +29662,23 @@ var Header = function (_Component) {
 
 
             return _react2.default.createElement(
-                _semanticUiReact.Menu,
-                { stackable: true },
+                'div',
+                null,
                 _react2.default.createElement(
-                    _semanticUiReact.Menu.Item,
+                    'h1',
                     null,
-                    _react2.default.createElement('img', { src: 'assets/drone.png' })
+                    'Dronemappr'
                 ),
-                this._renderMenuItems()
+                _react2.default.createElement(
+                    _semanticUiReact.Menu,
+                    { stackable: true },
+                    _react2.default.createElement(
+                        _semanticUiReact.Menu.Item,
+                        null,
+                        _react2.default.createElement('img', { src: 'assets/drone.png' })
+                    ),
+                    this._renderMenuItems()
+                )
             );
         }
     }]);
@@ -30280,7 +30291,7 @@ function updateFilterState(oldState, options) {
 function fetchAll(oldState, options) {
     // console.log('returning all data from api')
     return new Promise(function (resolve, reject) {
-        _superagent2.default.get('http://localhost:8001/api/').end(function (err, res) {
+        _superagent2.default.get('http://104.236.214.92:8001/api/').end(function (err, res) {
             if (err || !res.ok) {
                 reject(err);
                 return;

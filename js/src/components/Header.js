@@ -33,12 +33,15 @@ export default class Header extends Component {
 
 
         return (
-            <Menu stackable>
-                <Menu.Item>
-                    <img src='assets/drone.png' />
-                </Menu.Item>
-                {this._renderMenuItems()}
-            </Menu>
+            <div>
+                <h1>Dronemappr</h1>
+                <Menu stackable>
+                    <Menu.Item>
+                        <img src='assets/drone.png' />
+                    </Menu.Item>
+                    {this._renderMenuItems()}
+                </Menu>
+            </div>
         );
     }
 }
