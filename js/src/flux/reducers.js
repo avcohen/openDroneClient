@@ -70,6 +70,7 @@ export function updateFilterState(oldState, options) {
     .catch(e => console.log(e));
 };
 
+
 export function fetchAll(oldState, options) {
     // console.log('returning all data from api')
     return new Promise((resolve, reject) => {
@@ -90,11 +91,19 @@ export function fetchAll(oldState, options) {
     .catch(e => console.log(e));
 };
 
-export function removeFilterLayer(oldState, index){
-    // splice not working like splice works?
-    const updatedLayerArray = oldState.filterLayers.splice(index , 1)
 
+/**
+ * removeFilterLayer - removes a specfic filter from Layers component
+ *
+ * @param  {object} oldState old app state (props) before changes
+ * @param  {number} index    index of item to be deleted
+ * @return {object}          new app state with changes
+ */
+
+export function removeFilterLayer(oldState, index){
+    const {filterLayers} = oldState;
+    const updatedLayerArray = [...filterLayers.slice(0, index), ...filterLayers.slice(index+1)]
     return new Promise((resolve, reject) => {
-        resolve({...oldState, filterLayers : [updatedLayerArray] })
+        resolve({...oldState, filterLayers : updatedLayerArray })
     })
 };

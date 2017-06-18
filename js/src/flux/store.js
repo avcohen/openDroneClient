@@ -3,6 +3,6 @@ export const Store = {
     filteredResults : [],
     filterLayers : [],
     cachedResults : [],
-    center : { lat: 35.996023, lng: 36.784644 },
+    center : { lat: 30.4472723, lng: 58.5645771 },
     displayAll : true,
 }

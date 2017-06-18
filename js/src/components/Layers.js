@@ -11,26 +11,28 @@ export default class Layers extends Component {
         }
     };
 
-    // _layerContainerStyles = {
-    // };
-    //
-    // _layerItemStyles = {
-    // };
-    //
-    // _loadLayers(props = this.props){
-    //
-    // };
-
-    // deletes layer entirely
+    /**
+     * _removeLayer - called by onRemove for each filter Label Element
+     *
+     * @param  {object} e    event
+     * @param  {object} data data from element where function was called
+     * @param  {number} i    index of layer clicked
+     */
     _removeLayer(e, data, i){
-        e.stopPropagation();
+        e.stopPropagation(); // required to prevent bubble up to parent Label element
         console.log('(_removelayer) removing layer at index : ', i)
         this.props.dispatch('REMOVE_LAYER', i);
         e.preventDefault();
     }
 
-    // toggles highlight of label to show is active/inactive, toggles props of current layer to match
-    _toggleLayerVisibility = (e, data, i) => {
+    /**
+     * _toggleLayerVisibility - toggles highlight of label to show as active/inactive, toggles props of current layer to match
+     *
+     * @param  {object} e    event
+     * @param  {object} data data from element where function was called
+     * @param  {number} i    index of layer clicked
+     */
+    _toggleLayerVisibility(e, data, i){
         // console.log(e, data, i)
         e.preventDefault();
     }

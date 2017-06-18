@@ -10,7 +10,8 @@ export default class Main extends Component {
 		const actionToDo = actions[actionName];
 		actionToDo(this.state, options).then((newStore) => {
 			this.setState(newStore);
-		});
+		})
+        .catch(e => console.log(e));;
 	}
 
 	render() {

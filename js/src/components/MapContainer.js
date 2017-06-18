@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import request from 'superagent';
+import { Card , Icon } from 'semantic-ui-react';
 
 const generateRandomFunc = (functionRoot, cb = function(){}) => {
 	const functionName = `${functionRoot}_${Date.now()}`;
@@ -14,6 +15,7 @@ const generateRandomFunc = (functionRoot, cb = function(){}) => {
 	}
 	return functionName;
 };
+
 
 const paramify = params => Object.keys(params)
 	.map(key => [key, params[key]].join('='))
@@ -41,7 +43,7 @@ const loadGMapScript = (url, params) => {
 }
 
 const loadMap = (domNode, options = {}) => new google.maps.Map(domNode, Object.assign({
-	zoom: 3,
+	zoom: 4,
 }, options));
 
 export default class MapContainer extends Component {
@@ -52,7 +54,6 @@ export default class MapContainer extends Component {
 		this.props.dispatch('FETCH_ALL_DATA');
 
 		this.state = {
-			// strikeData : this.props.cachedResults,
 			filtered : false,
 			mapLoaded : false,
 			markersLoaded : false,
@@ -75,6 +76,7 @@ export default class MapContainer extends Component {
         left: 0,
         cursor: 'wait',
     };
+
 
     _loadMap() {
 		// console.log(this.props)
@@ -111,77 +113,106 @@ export default class MapContainer extends Component {
 	// 	console.log('rendering circle', filterCircle )
 	// };
 
+	_markerConstructor(markerArray){
+		markerArray.forEach((strike, i) => {
 
-// inital state loads all markers
-// 	if filter is created, don't display all, only filters with status of active
+			if (!this.map) return;
+			const marker = new google.maps.Marker({
+				strikeData : {
+					country : strike.country,
+					date : strike.date,
+					kills : strike.kills,
+					coords : { lat : strike.lat , lng : strike.lon }
+				},
+				position : { lat : strike.lat, lng : strike.lon },
+				map : this.map,
+			});
 
+
+			// Geocoder
+			// Needs better loop to pull data, esp if data not present.
+			// const geocoder = new google.maps.Geocoder;
+			// const formattedAddress = geocoder.geocode({'location' : { lat : parseFloat(strike.lat) , lng : parseFloat(strike.lon) } } , (results, status) =>{
+			// 	if (status === 'OK'){
+			// 		console.log( results[4].formatted_address )
+			// 		return results[4].formatted_address
+			// 	}
+			// })
+
+
+			const infoWindow = new google.maps.InfoWindow({
+				content : `
+					<div class="ui card">
+						<div class="content">
+							<div class="header">Strike Data</div>
+						</div>
+						<div class="content">
+							<h3 class="ui sub header">${marker.strikeData.country}</h3>
+							<h3 class="ui sub header">formatted address placeholder</h3>
+							<h3 class="ui sub header">Casualties : ${marker.strikeData.kills}</h3>
+							<div class="ui small feed">
+								<div class="event">
+									<div class="content">
+										<div class="summary">
+											Coords : ${marker.strikeData.coords.lat.toFixed(3)} , ${marker.strikeData.coords.lng.toFixed(3)}
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="extra content">
+							<button class="ui button">Link 1</button>
+							<button class="ui button">Link 2</button>
+							<button class="ui button">Link 3</button>
+						</div>
+					</div>
+				`,
+			});
+
+			marker.addListener('click', () => {
+				if (this.currentOpenWindow) {
+					this.currentOpenWindow.close();
+					this.currentOpenWindow = null;
+				}
+				this.infoWindows[i].open(this.map , marker);
+				this.currentOpenWindow = this.infoWindows[i];
+			})
+
+			this.markers.push(marker)
+			this.infoWindows.push(infoWindow)
+		})
+	}
 
 	_loadMarkers(props = this.props) {
-
 		const {cachedResults, filteredResults , filterLayers, displayAll } = props;
 
-		filterLayers.map((layer, i) => {
-
-		})
-
-		// clears all markers
+		// clear markers from maps
 		if (this.markers && this.markers.length) {
 			this.markers.forEach(marker => marker.setMap(null))
 		}
-
+		// containers for markers to be returned from data sets then pushed to map;
 		this.markers = [];
 		this.infoWindows = [];
 		this.currentOpenWindow = null;
 
-
-
 		if (props.displayAll) {
 			const dataToLoad = (filteredResults.length === 0) ? cachedResults : filteredResults;
-			dataToLoad.forEach((strike, i) => {
-				if (!this.map) return;
-				// setTimeout(() => {
-					const marker = new google.maps.Marker({
-						strikeData : {
-							country : strike.country,
-							date : strike.date,
-							kills : strike.kills,
-							coords : { lat : strike.lat , lng : strike.lon }
-						},
-						position : { lat : strike.lat, lng : strike.lon },
-						map : this.map,
-						// animation: google.maps.Animation['DROP']
-					});
-
-					const infoWindow = new google.maps.InfoWindow({
-						content : `
-							<h3>Location : ${marker.strikeData.country}</h3>
-							<h5>Date : ${marker.strikeData.date}</h5>
-							<h5>Kills : ${marker.strikeData.kills}</h5>
-							<h5>Coords : ${marker.strikeData.coords.lat} , ${marker.strikeData.coords.lng} </h5>
-							<h5>
-								<ul class="strikeLinksList">
-									<li class="strikeLink"><a href="#" target="_blank">Link</a></li>
-									<li class="strikeLink"><a href="#" target="_blank">Link</a></li>
-									<li class="strikeLink"><a href="#" target="_blank">Link</a></li>
-								</ul>
-							</h5>
-						`,
-					});
-
-					marker.addListener('click', () => {
-						if (this.currentOpenWindow) {
-							this.currentOpenWindow.close();
-							this.currentOpenWindow = null;
-						}
-						this.infoWindows[i].open(this.map , marker);
-						this.currentOpenWindow = this.infoWindows[i];
-					})
-
-					this.markers.push(marker)
-					this.infoWindows.push(infoWindow)
-				// }, i * 8)
-			})
+			this._markerConstructor(dataToLoad)
 		}
+
+		// const dataToLoad = (filteredResults.length === 0) ? cachedResults : filteredResults;
+
+		filterLayers.map((filterLayer, i) => {
+			// add regex to allow inclusion of 'all' among year, country, etc..
+			const filteredData = cachedResults.filter((r) => {
+				const year = new Date(r.date.toString());
+				const fullYear = year.getFullYear();
+				console.log(fullYear, filterLayer.year )
+				return 	r.country.toLowerCase() === filterLayer.country
+						&& fullYear  === filterLayer.year
+			})
+			this._markerConstructor(filteredData);
+		})
 		// const dataToLoad = (filteredResults.length === 0) ? cachedResults : filteredResults;
 	};
 
