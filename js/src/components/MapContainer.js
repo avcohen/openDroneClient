@@ -1,50 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import request from 'superagent';
-import { Card , Icon } from 'semantic-ui-react';
-
-const generateRandomFunc = (functionRoot, cb = function(){}) => {
-	const functionName = `${functionRoot}_${Date.now()}`;
-	window[functionName] = (overrideCb = null) => {
-		delete window[functionName];
-		if (overrideCb) {
-			overrideCb();
-			return;
-		}
-		cb();
-	}
-	return functionName;
-};
-
-
-const paramify = params => Object.keys(params)
-	.map(key => [key, params[key]].join('='))
-	.join('&');
-
-const loadGMapScript = (url, params) => {
-	return new Promise((resolve, reject) => {
-		const functionName = generateRandomFunc('gmapsCallback', () => {
-			resolve(true)
-		});
-
-		params = Object.assign({}, params, {
-			callback: functionName
-		});
-
-		const script = document.createElement('script');
-		script.onload = () => window[functionName];
-		script.onerror = (e) => window[functionName](() => {
-			reject(e);
-		});
-		script.type = 'text/javascript';
-	    script.src = url + '?' + paramify(params);
-	    document.body.appendChild( script );
-	});
-}
-
-const loadMap = (domNode, options = {}) => new google.maps.Map(domNode, Object.assign({
-	zoom: 4,
-}, options));
+import { Card , Icon, Sidebar } from 'semantic-ui-react';
+import { generateRandomFunc, paramify, loadGMapScript, loadMap } from '../util/util';
 
 export default class MapContainer extends Component {
 
@@ -129,16 +87,14 @@ export default class MapContainer extends Component {
 			});
 
 
-			// Geocoder
-			// Needs better loop to pull data, esp if data not present.
-			// const geocoder = new google.maps.Geocoder;
-			// const formattedAddress = geocoder.geocode({'location' : { lat : parseFloat(strike.lat) , lng : parseFloat(strike.lon) } } , (results, status) =>{
-			// 	if (status === 'OK'){
-			// 		console.log( results[4].formatted_address )
-			// 		return results[4].formatted_address
-			// 	}
-			// })
-
+		// Geocoder
+		// Needs better loop to pull data, esp if data not present.
+		// const geocoder = new google.maps.Geocoder;
+		// const formattedAddress = geocoder.geocode({'location' : { lat : parseFloat(strike.lat) , lng : parseFloat(strike.lon) } } , (results, status) =>{
+		// 	if (status === 'OK'){
+		// 		console.log( results[4].formatted_address )
+		// 		return results[4].formatted_address
+		// 	}
 
 			const infoWindow = new google.maps.InfoWindow({
 				content : `

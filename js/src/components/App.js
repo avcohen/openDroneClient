@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import Filters from './Filters';
 import Footer from './Footer';
+import FilterMenu from './FilterMenu';
 import Header from './Header';
 import MapContainer from './MapContainer';
-import { Menu } from 'semantic-ui-react';
+import { Menu, Sidebar } from 'semantic-ui-react';
 
 // make filters component parent of MapContainer and future ListContianer??
 
@@ -14,14 +15,24 @@ export default class App extends Component {
         super(props)
     }
 
+
     render() {
         return (
             <div>
                 <Header {...this.props} />
-                <Filters {...this.props} />
-                <MapContainer {...this.props} apiKey={apiKey} />
+                <FilterMenu {...this.props} />
+                <Sidebar.Pushable>
+                    <Sidebar as={Menu} animation='push' direction='top' visible={this.props.filterMenuVisible}>
+                        <Filters {...this.props} />
+                    </Sidebar>
+                    <Sidebar.Pusher>
+                        <MapContainer {...this.props} apiKey={apiKey} />
+                    </Sidebar.Pusher>
+                </Sidebar.Pushable>
                 <Footer {...this.props} />
             </div>
         );
     }
 }
+
+//

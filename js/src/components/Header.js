@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Menu } from 'semantic-ui-react';
+import { Menu, Icon} from 'semantic-ui-react';
 
 export default class Header extends Component {
     state = {
@@ -37,11 +37,16 @@ export default class Header extends Component {
         return (
             <div>
                 <h1>Dronemappr</h1>
-                <Menu stackable>
+                <Menu>
                     <Menu.Item>
                         <img src='assets/drone.png' />
                     </Menu.Item>
                     {this._renderMenuItems()}
+                    <Menu.Menu position='right'>
+                        <Menu.Item>
+                            <Icon name='content' />
+                        </Menu.Item>
+                    </Menu.Menu>
                 </Menu>
             </div>
         );

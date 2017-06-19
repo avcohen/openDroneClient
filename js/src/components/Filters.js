@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import ColorPicker from './ColorPicker'
 import Layers from './Layers';
-import { Form, Grid, Icon, Menu , Message } from 'semantic-ui-react';
+import { Form, Grid, Icon, Menu, Message, Sidebar } from 'semantic-ui-react';
 
 const options = {
     country : [
         { key : 'all', text: 'All', value : 'all'},
-        { key: 'afganistan', text: 'Afghanistan', value: 'afghanistan', countryCode: 'af' },
-        { key: 'pakistan', text: 'Pakistan', value: 'pakistan', countryCode: 'pk' },
-        { key: 'syria', text: 'Syria', value: 'syria', countryCode: 'sy' },
-        { key: 'yemen', text: 'Yemen', value: 'yemen', countryCode: 'ye'},
+        { key: 'afganistan', text: 'Afghanistan', value: 'afghanistan' },
+        { key: 'pakistan', text: 'Pakistan', value: 'pakistan' },
+        { key: 'syria', text: 'Syria', value: 'syria'  },
+        { key: 'yemen', text: 'Yemen', value: 'yemen' },
     ],
     year : [
         { key : 'all', text: 'All', value : 'all'},
@@ -25,8 +25,6 @@ export default class Filters extends Component {
     constructor(props){
         super(props)
         this.state = {
-            filterMenuVisible : false,
-            layerMenuVisible : false,
             filterName : null,
             country : null,
             year : null,
@@ -75,17 +73,8 @@ export default class Filters extends Component {
         e.preventDefault();
     }
 
-    _toggleAllMarkerVisibility(){
-        return this.props.displayAll === true ? { icon : "hide" , text : "Hide All", color : "orange" } : {icon : "unhide" , text : "Show All", color : "blue" }
-    }
-
-    _toggleFilterMenuVisibility = (e) => {
-        this.setState({ filterMenuVisible : !this.state.filterMenuVisible });
-        e.preventDefault();
-    }
-
-    _toggleLayerMenuVisibility = (e) => {
-        this.setState({ layerMenuVisible : !this.state.layerMenuVisible });
+    _clearAllLayers = (e) => {
+        this.props.dispatch('DELETE_FILTERED_DATA');
         e.preventDefault();
     }
 
@@ -93,43 +82,34 @@ export default class Filters extends Component {
 
     render() {
         return (
-            <div>
-                <Menu inverted>
-                    <Menu.Item name='Filters' onClick={this._toggleFilterMenuVisibility} >
-                        <Icon name='plus' />
-                        Show Filters
-                    </Menu.Item>
-                    <Menu.Item name='Layers' onClick={this._toggleLayerMenuVisibility} >
-                        <Icon name='plus' />
-                        Show Layers
-                    </Menu.Item>
-                    <Menu.Menu position='right' >
-                        <Menu.Item name='Toggle' onClick={this._toggleAll} color={this._toggleAllMarkerVisibility().color} >
-                            <Icon name={this._toggleAllMarkerVisibility().icon} />
-                            {this._toggleAllMarkerVisibility().text}
-                        </Menu.Item>
-                    </Menu.Menu>
-                </Menu>
-                <Form className={"info message"} >
-                    <Grid divided='vertically'>
-                        <Grid.Row>
-                            <Form.Input name="filterName" label="Filter Name" placeholder="Filter Name" onChange={this._onFilterChange} />
-                            <Form.Select name="country" label="Country" options={options.country} placeholder="All" onChange={this._onFilterChange} />
-                            <Form.Select name="year" label="Year" options={options.year} placeholder="All" onChange={this._onFilterChange} />
-                            <Form.Button label="Apply Filter" onClick={this._onFilterSubmit} ><Icon name="filter"></Icon></Form.Button>
-                            <Form.Button label="Add Layer" onClick={this._addLayer} >
-                                <Icon.Group>
-                                    <Icon name='clone' />
-                                    <Icon corner name='add' />
-                                </Icon.Group>
-                            </Form.Button>
-                        </Grid.Row>
-                        <Grid.Row>
-                            <Layers {...this.props} />
-                        </Grid.Row>
-                    </Grid>
-                </Form>
-            </div>
+            <Form className={"info message"} >
+                <Grid divided='vertically'>
+                    <Grid.Row>
+                        <Form.Input name="filterName" label="Filter Name" placeholder="Filter Name" onChange={this._onFilterChange} />
+                        <Form.Select name="country" label="Country" options={options.country} placeholder="All" onChange={this._onFilterChange} />
+                        <Form.Select name="year" label="Year" options={options.year} placeholder="All" onChange={this._onFilterChange} />
+                        <Form.Button label="Apply Filter" onClick={this._onFilterSubmit} ><Icon name="filter"></Icon></Form.Button>
+
+                        <Form.Button label="Add Layer" onClick={this._addLayer} >
+                            <Icon.Group>
+                                <Icon name='clone' />
+                                <Icon corner name='add' />
+                            </Icon.Group>
+                        </Form.Button>
+
+                        <Form.Button label="Clear Layers" onClick={this._clearAllLayers} >
+                            <Icon.Group>
+                                <Icon name='clone' />
+                                <Icon corner name='remove' />
+                            </Icon.Group>
+                        </Form.Button>
+
+                    </Grid.Row>
+                    <Grid.Row>
+                        <Layers {...this.props} />
+                    </Grid.Row>
+                </Grid>
+            </Form>
         );
     };
 

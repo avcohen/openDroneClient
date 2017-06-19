@@ -29,9 +29,34 @@ export function addFilterLayer(oldState, layerParams){
 
 export function displayAll(oldState){
     return new Promise((resolve, reject) => {
-            resolve({...oldState, displayAll : !oldState.displayAll })
+        resolve({...oldState, displayAll : !oldState.displayAll })
     })
+};
 
+export function deleteFilteredData(oldState){
+    return new Promise((resolve, reject) => {
+        resolve({...oldState, filteredResults : null , displayAll : !oldState.displayAll })
+    })
+};
+
+export function fetchAll(oldState, options) {
+    // console.log('returning all data from api')
+    return new Promise((resolve, reject) => {
+        request
+            .get('https://localhost:8443/api/v1/')
+            .end((err,res)=>{
+                if (err || !res.ok){
+                    reject(err)
+                    return;
+                }
+                const jsonData = JSON.parse(res.text);
+                const arrayResults = Object.values(jsonData);
+                resolve(Object.assign({}, oldState, {
+                    cachedResults : arrayResults
+                }))
+            })
+    })
+    .catch(e => console.log(e));
 };
 
 export function filterStrikes(oldState, filterParams) {
@@ -45,12 +70,35 @@ export function filterStrikes(oldState, filterParams) {
         .catch(e => console.log(e));
 };
 
+/**
+ * removeFilterLayer - removes a specfic filter by index from Layers component
+ *
+ * @param  {object} oldState old app state (props) before changes
+ * @param  {number} index    index of item to be deleted
+ * @return {object}          new app state with changes
+ */
+
+export function removeFilterLayer(oldState, index){
+    const {filterLayers} = oldState;
+    const updatedLayerArray = [...filterLayers.slice(0, index), ...filterLayers.slice(index+1)]
+    return new Promise((resolve, reject) => {
+        resolve({...oldState, filterLayers : updatedLayerArray })
+    })
+};
+
+export function toggleFilterMenuVisibility(oldState, options){
+    return new Promise((resolve, reject) => {
+        resolve({...oldState, filterMenuVisible : options });
+    })
+    .catch(e => console.log(e));
+};
+
 export function updateFilterState(oldState, options) {
     return new Promise((resolve, reject) => {
         // console.log('update fulter state', options)
         const {country, year, filterByRadius, radius, origin} = options;
         const {lat, lng} = options.origin;
-        const baseUrl = 'http://localhost:8001/api/country?q='+country;
+        const baseUrl = 'http://localhost:8001/api/v1/country?q='+country;
         reqGET(baseUrl).then(data => {
             resolve(Object.assign({}, oldState, {
                 searchOptions : {
@@ -68,42 +116,4 @@ export function updateFilterState(oldState, options) {
         })
     })
     .catch(e => console.log(e));
-};
-
-
-export function fetchAll(oldState, options) {
-    // console.log('returning all data from api')
-    return new Promise((resolve, reject) => {
-        request
-            .get('https://104.236.214.92:8443/api/')
-            .end((err,res)=>{
-                if (err || !res.ok){
-                    reject(err)
-                    return;
-                }
-                const jsonData = JSON.parse(res.text);
-                const arrayResults = Object.values(jsonData);
-                resolve(Object.assign({}, oldState, {
-                    cachedResults : arrayResults
-                }))
-            })
-    })
-    .catch(e => console.log(e));
-};
-
-
-/**
- * removeFilterLayer - removes a specfic filter from Layers component
- *
- * @param  {object} oldState old app state (props) before changes
- * @param  {number} index    index of item to be deleted
- * @return {object}          new app state with changes
- */
-
-export function removeFilterLayer(oldState, index){
-    const {filterLayers} = oldState;
-    const updatedLayerArray = [...filterLayers.slice(0, index), ...filterLayers.slice(index+1)]
-    return new Promise((resolve, reject) => {
-        resolve({...oldState, filterLayers : updatedLayerArray })
-    })
 };
