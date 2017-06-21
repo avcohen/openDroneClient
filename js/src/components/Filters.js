@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import ColorPicker from './ColorPicker'
 import Layers from './Layers';
 import { Container, Form, Grid, Icon, Menu, Message } from 'semantic-ui-react';
 
@@ -58,13 +57,12 @@ export default class Filters extends Component {
     }
 
     _onFilterSubmit = (e) => {
-        this.props.dispatch('UPDATE_FILTERS', this.state);
         this.props.dispatch('FILTER_STRIKES', this.state);
         e.preventDefault();
     }
 
     _addLayer = (e) => {
-        this.props.dispatch('ADD_LAYER', this.state);
+        this.props.dispatch('ADD_AND_FILTER_LAYER', this.state);
         e.preventDefault();
     }
 
@@ -77,8 +75,6 @@ export default class Filters extends Component {
         this.props.dispatch('DELETE_FILTERED_DATA');
         e.preventDefault();
     }
-
-    // _flagRenderer = (item) => <Flag name={item.countryCode} />
 
     render() {
         return (

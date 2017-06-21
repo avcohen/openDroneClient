@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Counter from './Counter';
 import { Menu, Icon } from 'semantic-ui-react';
 
 export default class FilterMenu extends Component {
@@ -21,7 +22,6 @@ export default class FilterMenu extends Component {
     };
 
     _toggleFilterMenuVisibility = (e) => {
-        console.log(this.props);
         this.setState({ filterMenuVisible : !this.state.filterMenuVisible });
         this.props.dispatch('TOGGLE_FILTER_MENU_VISIBILITY', !this.state.filterMenuVisible );
         e.preventDefault();
@@ -38,7 +38,9 @@ export default class FilterMenu extends Component {
                     <Icon name={this.props.filterMenuVisible === false ? 'plus' : 'minus' } />
                     {this.props.filterMenuVisible === false ? 'Show Filters' : 'Hide Filters' }
                 </Menu.Item>
-
+                <Menu.Item name='StrikeCount' >
+                    <Counter {...this.props} />
+                </Menu.Item>
                 <Menu.Menu position='right' >
                     <Menu.Item name='Toggle' color={this._toggleAllMarkerVisibility().color} active={this.displayAll === true} onClick={this._toggleAll}  >
                         <Icon name={this._toggleAllMarkerVisibility().icon} />

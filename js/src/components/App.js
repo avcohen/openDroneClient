@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Counter from './Counter';
 import Filters from './Filters';
 import Footer from './Footer';
 import FilterMenu from './FilterMenu';
@@ -19,7 +18,6 @@ export default class App extends Component {
         return (
             <div>
                 <Header {...this.props} />
-                <Counter {...this.props} />
                 <FilterMenu {...this.props} />
                 <Sidebar.Pushable>
                     <Sidebar as={Menu} animation='push' direction='top' visible={this.props.filterMenuVisible}>

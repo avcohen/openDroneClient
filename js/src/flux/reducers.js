@@ -35,7 +35,7 @@ export function displayAll(oldState){
 
 export function deleteFilteredData(oldState){
     return new Promise((resolve, reject) => {
-        resolve({...oldState, filteredResults : null , displayAll : !oldState.displayAll })
+        resolve({...oldState, filteredResults : null , displayAll : !oldState.displayAll  })
     })
 };
 
@@ -63,7 +63,6 @@ export function filterStrikes(oldState, filterParams) {
         return new Promise((resolve, reject) => {
             const filteredStrikes = oldState.cachedResults.filter((strike) => {
                                         return  strike.country.toUpperCase() === filterParams.country.toUpperCase()
-                                                && strike.date.getFullYear() === filterParams.year
                                     });
             resolve({...oldState, filteredResults : filteredStrikes });
         })
@@ -79,11 +78,25 @@ export function filterStrikes(oldState, filterParams) {
  */
 
 export function removeFilterLayer(oldState, index){
-    const {filterLayers} = oldState;
+    const { filterLayers, filteredResults } = oldState;
     const updatedLayerArray = [...filterLayers.slice(0, index), ...filterLayers.slice(index+1)]
+    const fitlerCritera = filterLayers[index];
+
+    const updatedFilteredResults = filteredResults.filter((curr) => {
+        return curr.country === fitlerCritera.country
+                && curr.year === fitlerCritera.year
+    });
+
+    const noFiltersToDisplay = updatedLayerArray.length === 0 ? true : false;
+
     return new Promise((resolve, reject) => {
-        resolve({...oldState, filterLayers : updatedLayerArray })
+        resolve({...oldState,
+                    filterLayers : updatedLayerArray,
+                    filteredResults : updatedFilteredResults,
+                    displayAll : noFiltersToDisplay,
+                });
     })
+    .catch(e => console.log(e));
 };
 
 export function toggleFilterMenuVisibility(oldState, options){
@@ -93,26 +106,28 @@ export function toggleFilterMenuVisibility(oldState, options){
     .catch(e => console.log(e));
 };
 
-export function updateFilterState(oldState, options) {
-    return new Promise((resolve, reject) => {
-        const {country, year, filterByRadius, radius, origin} = options;
-        const {lat, lng} = options.origin;
-        const baseUrl = 'http://localhost:8443/api/v1/country/'+country;
-        reqGET(baseUrl).then(data => {
-            resolve(Object.assign({}, oldState, {
-                searchOptions : {
-                    country,
-                    year,
-                    filterByRadius,
-                    radius,
-                    origin: {
-                        lat,
-                        lng
-                    }
-                },
-                filteredResults: data,
-            }))
-        })
-    })
-    .catch(e => console.log(e));
-};
+
+// possibly uneeded ???
+// export function updateFilterState(oldState, options) {
+//     return new Promise((resolve, reject) => {
+//         const {country, year, filterByRadius, radius, origin} = options;
+//         const {lat, lng} = options.origin;
+//         const baseUrl = 'http://localhost:8443/api/v1/country/'+country;
+//         reqGET(baseUrl).then(data => {
+//             resolve(Object.assign({}, oldState, {
+//                 searchOptions : {
+//                     country,
+//                     year,
+//                     filterByRadius,
+//                     radius,
+//                     origin: {
+//                         lat,
+//                         lng
+//                     }
+//                 },
+//                 filteredResults: data,
+//             }))
+//         })
+//     })
+//     .catch(e => console.log(e));
+// };

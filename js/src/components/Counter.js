@@ -5,9 +5,14 @@ export default class Counter extends Component {
 
     constructor(props){
         super(props)
+        this.state = {
+            redraw : false
+        }
     };
 
     render(){
+
+        const currentStrikesDisplayed = this.props.filteredResults.length > 0 ? this.props.filteredResults.length : this.props.cachedResults.length
 
         const counterStyle = {
             fontFamily : 'solari',
@@ -19,11 +24,11 @@ export default class Counter extends Component {
               style={counterStyle}
               className="custom-count"
               start={0}
-              end={this.props.cachedResults.length}
+              end={currentStrikesDisplayed}
               duration={1.75}
               useEasing={true}
               separator=" "
-              redraw="true"
+              redraw={this.state.redraw}
               decimal=","
             />
         );

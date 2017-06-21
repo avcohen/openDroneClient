@@ -20,7 +20,6 @@ export default class Layers extends Component {
      */
     _removeLayer(e, data, i){
         e.stopPropagation(); // required to prevent bubble up to parent Label element
-        console.log('(_removelayer) removing layer at index : ', i)
         this.props.dispatch('REMOVE_LAYER', i);
         e.preventDefault();
     }

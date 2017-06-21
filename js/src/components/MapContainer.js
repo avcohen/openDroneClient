@@ -50,8 +50,9 @@ export default class MapContainer extends Component {
 
 	_markerConstructor(markerArray){
 		markerArray.forEach((strike, i) => {
-
 			if (!this.map) return;
+			const strikePosition = { lat : strike.lat , lng : strike.lon }
+
 			const marker = new google.maps.Marker({
 				strikeData : {
 					country : strike.country,
@@ -63,16 +64,6 @@ export default class MapContainer extends Component {
 				map : this.map,
 			});
 
-
-		// Geocoder
-		// Needs better loop to pull data, esp if data not present.
-		// const geocoder = new google.maps.Geocoder;
-		// const formattedAddress = geocoder.geocode({'location' : { lat : parseFloat(strike.lat) , lng : parseFloat(strike.lon) } } , (results, status) =>{
-		// 	if (status === 'OK'){
-		// 		console.log( results[4].formatted_address )
-		// 		return results[4].formatted_address
-		// 	}
-
 			const infoWindow = new google.maps.InfoWindow({
 				content : `
 					<div class="ui card">
@@ -80,23 +71,14 @@ export default class MapContainer extends Component {
 							<div class="header">Strike Data</div>
 						</div>
 						<div class="content">
-							<h3 class="ui sub header">${marker.strikeData.country}</h3>
-							<h3 class="ui sub header">formatted address placeholder</h3>
-							<h3 class="ui sub header">Casualties : ${marker.strikeData.kills}</h3>
 							<div class="ui small feed">
-								<div class="event">
-									<div class="content">
-										<div class="summary">
-											Coords : ${marker.strikeData.coords.lat.toFixed(3)} , ${marker.strikeData.coords.lng.toFixed(3)}
-										</div>
-									</div>
+								<div class="summary">${marker.strikeData.country}</div>
+								<div class="summary">Date : ${marker.strikeData.date}</div>
+								<div class="summary">Casualties : ${marker.strikeData.kills}</div>
+								<div class="summary">
+									Coords : ${marker.strikeData.coords.lat.toFixed(3)} , ${marker.strikeData.coords.lng.toFixed(3)}
 								</div>
 							</div>
-						</div>
-						<div class="extra content">
-							<button class="ui button">Link 1</button>
-							<button class="ui button">Link 2</button>
-							<button class="ui button">Link 3</button>
 						</div>
 					</div>
 				`,
