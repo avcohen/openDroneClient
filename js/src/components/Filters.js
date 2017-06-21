@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import ColorPicker from './ColorPicker'
 import Layers from './Layers';
-import { Form, Grid, Icon, Menu, Message, Sidebar } from 'semantic-ui-react';
+import { Container, Form, Grid, Icon, Menu, Message } from 'semantic-ui-react';
 
 const options = {
     country : [
@@ -82,34 +82,36 @@ export default class Filters extends Component {
 
     render() {
         return (
-            <Form className={"info message"} >
-                <Grid divided='vertically'>
-                    <Grid.Row>
-                        <Form.Input name="filterName" label="Filter Name" placeholder="Filter Name" onChange={this._onFilterChange} />
-                        <Form.Select name="country" label="Country" options={options.country} placeholder="All" onChange={this._onFilterChange} />
-                        <Form.Select name="year" label="Year" options={options.year} placeholder="All" onChange={this._onFilterChange} />
-                        <Form.Button label="Apply Filter" onClick={this._onFilterSubmit} ><Icon name="filter"></Icon></Form.Button>
+            <Container fluid>
+                <Form className={"info message"} >
+                    <Grid stackable columns='1' divided='vertically'>
+                        <Grid.Row>
+                            <Form.Input name="filterName" label="Filter Name" placeholder="Filter Name" onChange={this._onFilterChange} />
+                            <Form.Select name="country" label="Country" options={options.country} placeholder="All" onChange={this._onFilterChange} />
+                            <Form.Select name="year" label="Year" options={options.year} placeholder="All" onChange={this._onFilterChange} />
+                            <Form.Button label="Apply Filter" onClick={this._onFilterSubmit} ><Icon name="filter"></Icon></Form.Button>
 
-                        <Form.Button label="Add Layer" onClick={this._addLayer} >
-                            <Icon.Group>
-                                <Icon name='clone' />
-                                <Icon corner name='add' />
-                            </Icon.Group>
-                        </Form.Button>
+                            <Form.Button label="Add Layer" onClick={this._addLayer} >
+                                <Icon.Group>
+                                    <Icon name='clone' />
+                                    <Icon corner name='add' />
+                                </Icon.Group>
+                            </Form.Button>
 
-                        <Form.Button label="Clear Layers" onClick={this._clearAllLayers} >
-                            <Icon.Group>
-                                <Icon name='clone' />
-                                <Icon corner name='remove' />
-                            </Icon.Group>
-                        </Form.Button>
+                            <Form.Button label="Clear Layers" onClick={this._clearAllLayers} >
+                                <Icon.Group>
+                                    <Icon name='clone' />
+                                    <Icon corner name='remove' />
+                                </Icon.Group>
+                            </Form.Button>
 
-                    </Grid.Row>
-                    <Grid.Row>
-                        <Layers {...this.props} />
-                    </Grid.Row>
-                </Grid>
-            </Form>
+                        </Grid.Row>
+                        <Grid.Row>
+                            <Layers {...this.props} />
+                        </Grid.Row>
+                    </Grid>
+                </Form>
+            </Container>
         );
     };
 

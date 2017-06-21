@@ -9,5 +9,4 @@ export const actions = {
 	'REMOVE_LAYER' 		: (oldStore, options) => removeFilterLayer(oldStore, options),
 	'TOGGLE_FILTER_MENU_VISIBILITY' : (oldStore, options) => toggleFilterMenuVisibility(oldStore, options),
 	'UPDATE_FILTERS' 	: (oldStore, options) => updateFilterState(oldStore, options),
-
 }

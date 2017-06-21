@@ -8,9 +8,7 @@ export default class MapContainer extends Component {
 
 	constructor(props){
 		super(props);
-		// console.log('fetching all data from api')
 		this.props.dispatch('FETCH_ALL_DATA');
-
 		this.state = {
 			filtered : false,
 			mapLoaded : false,
@@ -35,7 +33,6 @@ export default class MapContainer extends Component {
         cursor: 'wait',
     };
 
-
     _loadMap() {
 		// console.log(this.props)
         const { mapUrl} = this.state;
@@ -50,26 +47,6 @@ export default class MapContainer extends Component {
                 mapLoaded: true,
             }))
     };
-
-	// _renderFilterRadius(props = this.props){
-	// 	if (!props.searchOptions.filterByRadius) {
-	// 		return;
-	// 	};
-	// 	const filterCircle = new google.maps.Circle({
-	// 		strokeColor : '#FF0000',
-	//         strokeOpacity : 0.8,
-	//         strokeWeight : 2,
-	//         fillColor : '#FF0000',
-	//         fillOpacity : 0.35,
-	// 		center: {
-	// 			lat : props.searchOptions.origin.lat,
-	// 			lng : props.searchOptions.origin.lng,
-	// 		},
-	// 		map : this.map,
-	// 		radius : props.searchOptions.radius,
-	// 	});
-	// 	console.log('rendering circle', filterCircle )
-	// };
 
 	_markerConstructor(markerArray){
 		markerArray.forEach((strike, i) => {
@@ -139,6 +116,13 @@ export default class MapContainer extends Component {
 		})
 	}
 
+	/**
+	 * _loadMarkers - description
+	 *
+	 * @param  {type} props = this.props description
+	 * @return {type}                    description
+	 */
+
 	_loadMarkers(props = this.props) {
 		const {cachedResults, filteredResults , filterLayers, displayAll } = props;
 
@@ -146,6 +130,7 @@ export default class MapContainer extends Component {
 		if (this.markers && this.markers.length) {
 			this.markers.forEach(marker => marker.setMap(null))
 		}
+
 		// containers for markers to be returned from data sets then pushed to map;
 		this.markers = [];
 		this.infoWindows = [];
@@ -156,14 +141,11 @@ export default class MapContainer extends Component {
 			this._markerConstructor(dataToLoad)
 		}
 
-		// const dataToLoad = (filteredResults.length === 0) ? cachedResults : filteredResults;
-
 		filterLayers.map((filterLayer, i) => {
 			// add regex to allow inclusion of 'all' among year, country, etc..
 			const filteredData = cachedResults.filter((r) => {
 				const year = new Date(r.date.toString());
 				const fullYear = year.getFullYear();
-				console.log(fullYear, filterLayer.year )
 				return 	r.country.toLowerCase() === filterLayer.country
 						&& fullYear  === filterLayer.year
 			})

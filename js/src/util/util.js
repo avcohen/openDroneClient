@@ -40,4 +40,9 @@ export const loadGMapScript = (url, params) => {
 
 export const loadMap = (domNode, options = {}) => new google.maps.Map(domNode, Object.assign({
 	zoom: 3,
+	streetViewControl : false,
+	mapTypeControl: false,
+	scaleControl: false,
+	rotateControl: false,
+	fullscreenControl: false,
 }, options));

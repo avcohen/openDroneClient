@@ -19,13 +19,13 @@ const reqGET = (url) => new Promise((resolve, reject) => {
         });
 });
 
+// pass in length of filtered data, append num to layer
 export function addFilterLayer(oldState, layerParams){
     const updatedLayerArray = oldState.filterLayers.concat([Object.assign({},layerParams)])
     return new Promise((resolve, reject) => {
         resolve({...oldState, filterLayers : updatedLayerArray, displayAll : false })
     })
 };
-
 
 export function displayAll(oldState){
     return new Promise((resolve, reject) => {
@@ -61,9 +61,9 @@ export function fetchAll(oldState, options) {
 
 export function filterStrikes(oldState, filterParams) {
         return new Promise((resolve, reject) => {
-            // NEEDS ADDITION OF DISTANCE BY KM CALCULATING RADIUS
             const filteredStrikes = oldState.cachedResults.filter((strike) => {
-                                        return strike.country.toUpperCase() === filterParams.country.toUpperCase()
+                                        return  strike.country.toUpperCase() === filterParams.country.toUpperCase()
+                                                && strike.date.getFullYear() === filterParams.year
                                     });
             resolve({...oldState, filteredResults : filteredStrikes });
         })
@@ -95,10 +95,9 @@ export function toggleFilterMenuVisibility(oldState, options){
 
 export function updateFilterState(oldState, options) {
     return new Promise((resolve, reject) => {
-        // console.log('update fulter state', options)
         const {country, year, filterByRadius, radius, origin} = options;
         const {lat, lng} = options.origin;
-        const baseUrl = 'http://localhost:8001/api/v1/country?q='+country;
+        const baseUrl = 'http://localhost:8443/api/v1/country/'+country;
         reqGET(baseUrl).then(data => {
             resolve(Object.assign({}, oldState, {
                 searchOptions : {
