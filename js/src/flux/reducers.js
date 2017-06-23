@@ -1,22 +1,5 @@
 import request from 'superagent';
 
-// improve promisified GET
-// const reqGET = (url) => new Promise((resolve, reject) => {
-//     request
-//         .get(url)
-//         .end((err,res)=>{
-//             if (err) {
-//                 reject(err);
-//             }
-//             try {
-//                 resolve(JSON.parse(res.text));
-//             }
-//             catch (e) {
-//                 reject(e);
-//             }
-//         });
-// });
-
 // pass in length of filtered data, append num to layer
 export function addFilterLayer(oldState, layerParams){
     const updatedLayerArray = oldState.filterLayers.concat([Object.assign({},layerParams)])
@@ -31,9 +14,13 @@ export function displayAll(oldState){
     })
 };
 
-export function deleteFilteredData(oldState){
+export function removeAllFilters(oldState){
     return new Promise((resolve, reject) => {
-        resolve({...oldState, filteredResults : null , displayAll : !oldState.displayAll  })
+        resolve({...oldState,
+                    filterLayers : [],
+                    filteredResults : [],
+                    displayAll : true,
+                })
     })
 };
 

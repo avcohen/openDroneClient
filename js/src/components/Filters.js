@@ -72,7 +72,7 @@ export default class Filters extends Component {
     }
 
     _clearAllLayers = (e) => {
-        this.props.dispatch('DELETE_FILTERED_DATA');
+        this.props.dispatch('REMOVE_ALL_FILTERS');
         e.preventDefault();
     }
 
@@ -92,9 +92,9 @@ export default class Filters extends Component {
                 <Grid columns='1' divided='vertically'>
                     <Grid.Row style={_rowStyle}>
                         <Form.Group widths='equal'>
-                            <Form.Input name="filterName" label="Filter Name" placeholder="Filter Name" onChange={this._onFilterChange} />
-                            <Dropdown inline search selection name="country" label="Country" options={options.country} placeholder="All" onChange={this._onFilterChange} />
-                            <Dropdown inline search selection name="year" label="Year" options={options.year} placeholder="All" onChange={this._onFilterChange} />
+                            <Form.Input name="filterName" placeholder="Filter Name" onChange={this._onFilterChange} />
+                            <Dropdown inline search selection name="country" label="Country" options={options.country} placeholder="Country" onChange={this._onFilterChange} />
+                            <Dropdown inline search selection name="year" label="Year" options={options.year} placeholder="Year" onChange={this._onFilterChange} />
                         </Form.Group>
                         <Form.Group>
 

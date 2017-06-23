@@ -28264,7 +28264,8 @@ var FilterMenu = function (_Component) {
         };
 
         _this.menuStyles = {
-            marginTop: '20px'
+            marginTop: '20px',
+            zIndex: 4
         };
 
         _this.state = {
@@ -28397,7 +28398,7 @@ var Filters = function (_Component) {
         };
 
         _this._clearAllLayers = function (e) {
-            _this.props.dispatch('DELETE_FILTERED_DATA');
+            _this.props.dispatch('REMOVE_ALL_FILTERS');
             e.preventDefault();
         };
 
@@ -28440,9 +28441,9 @@ var Filters = function (_Component) {
                         _react2.default.createElement(
                             _semanticUiReact.Form.Group,
                             { widths: 'equal' },
-                            _react2.default.createElement(_semanticUiReact.Form.Input, { name: 'filterName', label: 'Filter Name', placeholder: 'Filter Name', onChange: this._onFilterChange }),
-                            _react2.default.createElement(_semanticUiReact.Dropdown, { inline: true, search: true, selection: true, name: 'country', label: 'Country', options: options.country, placeholder: 'All', onChange: this._onFilterChange }),
-                            _react2.default.createElement(_semanticUiReact.Dropdown, { inline: true, search: true, selection: true, name: 'year', label: 'Year', options: options.year, placeholder: 'All', onChange: this._onFilterChange })
+                            _react2.default.createElement(_semanticUiReact.Form.Input, { name: 'filterName', placeholder: 'Filter Name', onChange: this._onFilterChange }),
+                            _react2.default.createElement(_semanticUiReact.Dropdown, { inline: true, search: true, selection: true, name: 'country', label: 'Country', options: options.country, placeholder: 'Country', onChange: this._onFilterChange }),
+                            _react2.default.createElement(_semanticUiReact.Dropdown, { inline: true, search: true, selection: true, name: 'year', label: 'Year', options: options.year, placeholder: 'Year', onChange: this._onFilterChange })
                         ),
                         _react2.default.createElement(
                             _semanticUiReact.Form.Group,
@@ -28882,7 +28883,7 @@ var MapContainer = function (_Component) {
 		key: 'componentDidMount',
 		value: function componentDidMount() {
 			this._loadMap();
-			// this._initShimLogic();
+			this._initShimLogic();
 		}
 	}, {
 		key: 'componentWillReceiveProps',
@@ -28901,15 +28902,13 @@ var MapContainer = function (_Component) {
 			return _react2.default.createElement(
 				'div',
 				{ ref: 'root', style: _wrapStyle },
+				_react2.default.createElement('div', { ref: 'shim', style: _shimStyles }),
 				_react2.default.createElement('div', { id: 'droneMap', ref: 'map', style: _wrapStyle }),
 				this.renderMarkers()
 			);
 		}
 	}, {
 		key: 'renderMarkers',
-
-		// removed from above id=droneMap
-		// <div ref="shim" style={ _shimStyles }></div>
 		value: function renderMarkers() {
 			var _this5 = this;
 
@@ -28960,8 +28959,8 @@ var actions = exports.actions = {
 	'DISPLAY_ALL': function DISPLAY_ALL(oldStore) {
 		return (0, _reducers.displayAll)(oldStore);
 	},
-	'DELETE_FILTERED_DATA': function DELETE_FILTERED_DATA(oldStore) {
-		return deleteFilteredData(oldStore);
+	'REMOVE_ALL_FILTERS': function REMOVE_ALL_FILTERS(oldStore) {
+		return (0, _reducers.removeAllFilters)(oldStore);
 	},
 	'FETCH_ALL_DATA': function FETCH_ALL_DATA(oldStore, options) {
 		return (0, _reducers.fetchAll)(oldStore, options);
@@ -28992,7 +28991,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 exports.addFilterLayer = addFilterLayer;
 exports.displayAll = displayAll;
-exports.deleteFilteredData = deleteFilteredData;
+exports.removeAllFilters = removeAllFilters;
 exports.fetchAll = fetchAll;
 exports.filterStrikes = filterStrikes;
 exports.removeFilterLayer = removeFilterLayer;
@@ -29005,23 +29004,6 @@ var _superagent2 = _interopRequireDefault(_superagent);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-// improve promisified GET
-// const reqGET = (url) => new Promise((resolve, reject) => {
-//     request
-//         .get(url)
-//         .end((err,res)=>{
-//             if (err) {
-//                 reject(err);
-//             }
-//             try {
-//                 resolve(JSON.parse(res.text));
-//             }
-//             catch (e) {
-//                 reject(e);
-//             }
-//         });
-// });
 
 // pass in length of filtered data, append num to layer
 function addFilterLayer(oldState, layerParams) {
@@ -29037,9 +29019,13 @@ function displayAll(oldState) {
     });
 };
 
-function deleteFilteredData(oldState) {
+function removeAllFilters(oldState) {
     return new Promise(function (resolve, reject) {
-        resolve(_extends({}, oldState, { filteredResults: null, displayAll: !oldState.displayAll }));
+        resolve(_extends({}, oldState, {
+            filterLayers: [],
+            filteredResults: [],
+            displayAll: true
+        }));
     });
 };
 

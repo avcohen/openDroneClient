@@ -154,7 +154,7 @@ export default class MapContainer extends Component {
 
     componentDidMount(){
 		this._loadMap();
-        // this._initShimLogic();
+        this._initShimLogic();
     };
 
 	componentWillReceiveProps(nextProps) {
@@ -171,14 +171,13 @@ export default class MapContainer extends Component {
         const { _wrapStyle , _shimStyles } = this
         return (
             <div ref="root" style={ _wrapStyle }>
-
+				<div ref="shim" style={ _shimStyles }></div>
                 <div id="droneMap" ref="map" style={ _wrapStyle }></div>
 				{this.renderMarkers()}
             </div>
         );
     };
-	// removed from above id=droneMap
-	// <div ref="shim" style={ _shimStyles }></div>
+
 	renderMarkers(){
 			const {mapLoaded} = this.state;
 			if (!mapLoaded) return null;
