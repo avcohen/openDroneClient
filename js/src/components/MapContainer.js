@@ -156,7 +156,7 @@ export default class MapContainer extends Component {
 
     componentDidMount(){
 		this._loadMap();
-        this._initShimLogic();
+        // this._initShimLogic();
     };
 
 	componentWillReceiveProps(nextProps) {

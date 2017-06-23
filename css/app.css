@@ -4,6 +4,9 @@
          format('truetype');;
 }
 
+input {
+    font-size: 16px;
+}
 #app {
     padding : 10px;
 }
