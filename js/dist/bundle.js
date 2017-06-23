@@ -28756,12 +28756,10 @@ var MapContainer = function (_Component) {
 		value: function _loadMap() {
 			var _this2 = this;
 
-			// console.log(this.props)
 			var mapUrl = this.state.mapUrl;
 			var _props = this.props,
 			    center = _props.center,
 			    apiKey = _props.apiKey;
-			// console.log(center, apiKey)
 
 			(0, _util.loadGMapScript)(mapUrl, { key: apiKey }).then(function (_) {
 				return _this2.map = (0, _util.loadMap)(_this2.refs.map, {
@@ -28903,13 +28901,15 @@ var MapContainer = function (_Component) {
 			return _react2.default.createElement(
 				'div',
 				{ ref: 'root', style: _wrapStyle },
-				_react2.default.createElement('div', { ref: 'shim', style: _shimStyles }),
 				_react2.default.createElement('div', { id: 'droneMap', ref: 'map', style: _wrapStyle }),
 				this.renderMarkers()
 			);
 		}
 	}, {
 		key: 'renderMarkers',
+
+		// removed from above id=droneMap
+		// <div ref="shim" style={ _shimStyles }></div>
 		value: function renderMarkers() {
 			var _this5 = this;
 

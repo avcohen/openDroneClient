@@ -34,10 +34,8 @@ export default class MapContainer extends Component {
     };
 
     _loadMap() {
-		// console.log(this.props)
         const { mapUrl} = this.state;
         const { center, apiKey } = this.props;
-		// console.log(center, apiKey)
         loadGMapScript(mapUrl, {key: apiKey})
             .then(_ => this.map = loadMap(this.refs.map, {
                 center,
@@ -173,13 +171,14 @@ export default class MapContainer extends Component {
         const { _wrapStyle , _shimStyles } = this
         return (
             <div ref="root" style={ _wrapStyle }>
-                <div ref="shim" style={ _shimStyles }></div>
+
                 <div id="droneMap" ref="map" style={ _wrapStyle }></div>
 				{this.renderMarkers()}
             </div>
         );
     };
-
+	// removed from above id=droneMap
+	// <div ref="shim" style={ _shimStyles }></div>
 	renderMarkers(){
 			const {mapLoaded} = this.state;
 			if (!mapLoaded) return null;
