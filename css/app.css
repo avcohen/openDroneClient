@@ -1,16 +1,22 @@
+@font-face {
+    font-family: 'solari';
+    src: url('../assets/fonts/solari.ttf')
+         format('truetype');;
+}
+
+#app {
+    padding : 10px;
+}
+
 .header {
     display: flex;
-    justify-content: center;
+    justify-content: left;
     align-items: center;
 }
 
 .header__link {
     color: #292929;
     font-size: 12px;
-}
-
-#app {
-    padding : 50px;
 }
 
 #app .react-grid-HeaderCell {
@@ -25,7 +31,6 @@
     to {
         transform: rotate(180deg);
     }
-
 }
 
 .square-loader {

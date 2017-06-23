@@ -17,20 +17,23 @@ export default class Counter extends Component {
         const counterStyle = {
             fontFamily : 'solari',
             fontSize : '45px',
+            paddingTop : '20px',
         };
 
         return(
-            <CountUp
-              style={counterStyle}
-              className="custom-count"
-              start={0}
-              end={currentStrikesDisplayed}
-              duration={1.75}
-              useEasing={true}
-              separator=" "
-              redraw={this.state.redraw}
-              decimal=","
-            />
+            <div>
+                <CountUp
+                  style={counterStyle}
+                  className="custom-count"
+                  start={0}
+                  end={currentStrikesDisplayed}
+                  duration={1.75}
+                  useEasing={true}
+                  separator=" "
+                  redraw={this.state.redraw}
+                  decimal=","
+                />
+            </div>
         );
     };
 };

@@ -34,17 +34,15 @@ export default class FilterMenu extends Component {
     render(){
         return(
             <Menu inverted stackable style={this.menuStyles} >
-                <Menu.Item name='Filters' onClick={this._toggleFilterMenuVisibility} >
-                    <Icon name={this.props.filterMenuVisible === false ? 'plus' : 'minus' } />
-                    {this.props.filterMenuVisible === false ? 'Show Filters' : 'Hide Filters' }
+                <Menu.Item name='Toggle' color={this._toggleAllMarkerVisibility().color} active={this.displayAll === true} onClick={this._toggleAll}  >
+                    <Icon name={this._toggleAllMarkerVisibility().icon} />
+                    {this._toggleAllMarkerVisibility().text}
                 </Menu.Item>
-                <Menu.Item name='StrikeCount' >
-                    <Counter {...this.props} />
-                </Menu.Item>
+
                 <Menu.Menu position='right' >
-                    <Menu.Item name='Toggle' color={this._toggleAllMarkerVisibility().color} active={this.displayAll === true} onClick={this._toggleAll}  >
-                        <Icon name={this._toggleAllMarkerVisibility().icon} />
-                        {this._toggleAllMarkerVisibility().text}
+                    <Menu.Item name='Filters' onClick={this._toggleFilterMenuVisibility} >
+                        <Icon name={this.props.filterMenuVisible === false ? 'plus' : 'minus' } />
+                        {this.props.filterMenuVisible === false ? 'Show Filters' : 'Hide Filters' }
                     </Menu.Item>
                 </Menu.Menu>
             </Menu>

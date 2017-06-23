@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Menu, Icon} from 'semantic-ui-react';
+import Counter from './Counter';
+import { Menu, Header , Image } from 'semantic-ui-react';
 
-export default class Header extends Component {
+export default class Banner extends Component {
     state = {
         activeMenuItem : null,
         menuItems : [
@@ -36,13 +37,17 @@ export default class Header extends Component {
 
         return (
             <div>
-                <h1>Dronemappr</h1>
-                <Menu stackable>
-                    <Menu.Item>
-                        <img src='assets/drone.png' />
-                    </Menu.Item>
+                <Header as='h2'>
+                <Image src='assets/drone.png' avatar/>
+                    <Header.Content>
+                    Dronemappr
+                    </Header.Content>
+                </Header>
+
+                <Menu>
                     {this._renderMenuItems()}
                 </Menu>
+                <Counter {...this.props} />
             </div>
         );
     }

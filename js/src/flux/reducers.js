@@ -1,23 +1,21 @@
 import request from 'superagent';
 
-
 // improve promisified GET
-const reqGET = (url) => new Promise((resolve, reject) => {
-    request
-        .get(url)
-        .end((err,res)=>{
-            if (err) {
-                reject(err);
-            }
-
-            try {
-                resolve(JSON.parse(res.text));
-            }
-            catch (e) {
-                reject(e);
-            }
-        });
-});
+// const reqGET = (url) => new Promise((resolve, reject) => {
+//     request
+//         .get(url)
+//         .end((err,res)=>{
+//             if (err) {
+//                 reject(err);
+//             }
+//             try {
+//                 resolve(JSON.parse(res.text));
+//             }
+//             catch (e) {
+//                 reject(e);
+//             }
+//         });
+// });
 
 // pass in length of filtered data, append num to layer
 export function addFilterLayer(oldState, layerParams){
@@ -43,7 +41,7 @@ export function fetchAll(oldState, options) {
     // console.log('returning all data from api')
     return new Promise((resolve, reject) => {
         request
-            .get('https://localhost:8443/api/v1/')
+            .get('https://104.236.214.92:8443/api/v1/')
             .end((err,res)=>{
                 if (err || !res.ok){
                     reject(err)

@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Layers from './Layers';
-import { Container, Form, Grid, Icon, Menu, Message } from 'semantic-ui-react';
+import { Container, Dropdown, Form, Grid, Icon, Menu, Message } from 'semantic-ui-react';
 
 const options = {
     country : [
-        { key : 'all', text: 'All', value : 'all'},
-        { key: 'afganistan', text: 'Afghanistan', value: 'afghanistan' },
-        { key: 'pakistan', text: 'Pakistan', value: 'pakistan' },
-        { key: 'syria', text: 'Syria', value: 'syria'  },
-        { key: 'yemen', text: 'Yemen', value: 'yemen' },
+        { key : 'all', text: 'All', value : 'all' },
+        { key: 'afganistan', text: 'Afghanistan', value: 'afghanistan', flag : 'af' },
+        { key: 'pakistan', text: 'Pakistan', value: 'pakistan', flag : 'pk' },
+        { key: 'syria', text: 'Syria', value: 'syria', flag : 'sy' },
+        { key: 'yemen', text: 'Yemen', value: 'yemen', flag : 'ye' },
     ],
     year : [
         { key : 'all', text: 'All', value : 'all'},
@@ -77,16 +77,28 @@ export default class Filters extends Component {
     }
 
     render() {
-        return (
-            <Container fluid>
-                <Form className={"info message"} >
-                    <Grid stackable columns='1' divided='vertically'>
-                        <Grid.Row>
-                            <Form.Input name="filterName" label="Filter Name" placeholder="Filter Name" onChange={this._onFilterChange} />
-                            <Form.Select name="country" label="Country" options={options.country} placeholder="All" onChange={this._onFilterChange} />
-                            <Form.Select name="year" label="Year" options={options.year} placeholder="All" onChange={this._onFilterChange} />
-                            <Form.Button label="Apply Filter" onClick={this._onFilterSubmit} ><Icon name="filter"></Icon></Form.Button>
 
+        const _formStyle = {
+            width : '100%',
+        }
+
+        const _rowStyle = {
+            padding : '5px',
+        }
+
+
+        return (
+            <Form className={"info message"} style={_formStyle}>
+                <Grid columns='1' divided='vertically'>
+                    <Grid.Row style={_rowStyle}>
+                        <Form.Group widths='equal'>
+                            <Form.Input name="filterName" label="Filter Name" placeholder="Filter Name" onChange={this._onFilterChange} />
+                            <Dropdown inline search selection name="country" label="Country" options={options.country} placeholder="All" onChange={this._onFilterChange} />
+                            <Dropdown inline search selection name="year" label="Year" options={options.year} placeholder="All" onChange={this._onFilterChange} />
+                        </Form.Group>
+                        <Form.Group>
+
+                            <Form.Button label="Apply Filter" onClick={this._onFilterSubmit} ><Icon name="filter"></Icon></Form.Button>
                             <Form.Button label="Add Layer" onClick={this._addLayer} >
                                 <Icon.Group>
                                     <Icon name='clone' />
@@ -100,14 +112,14 @@ export default class Filters extends Component {
                                     <Icon corner name='remove' />
                                 </Icon.Group>
                             </Form.Button>
+                        </Form.Group>
+                    </Grid.Row>
 
-                        </Grid.Row>
-                        <Grid.Row>
-                            <Layers {...this.props} />
-                        </Grid.Row>
-                    </Grid>
-                </Form>
-            </Container>
+                    <Grid.Row style={_rowStyle}>
+                        <Layers {...this.props} />
+                    </Grid.Row>
+                </Grid>
+            </Form>
         );
     };
 

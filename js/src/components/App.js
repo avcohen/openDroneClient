@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
+import Banner from './Banner';
 import Filters from './Filters';
 import Footer from './Footer';
 import FilterMenu from './FilterMenu';
-import Header from './Header';
 import MapContainer from './MapContainer';
 import { Menu, Sidebar } from 'semantic-ui-react';
 
@@ -14,13 +14,16 @@ export default class App extends Component {
     }
 
     render() {
-
+        const _sidebarStyle = {
+            textAlign : 'left',
+            padding : '5px',
+        }
         return (
             <div>
-                <Header {...this.props} />
+                <Banner {...this.props} />
                 <FilterMenu {...this.props} />
                 <Sidebar.Pushable>
-                    <Sidebar as={Menu} animation='push' direction='top' visible={this.props.filterMenuVisible}>
+                    <Sidebar style={_sidebarStyle} as={Menu} animation='push' direction='top' visible={this.props.filterMenuVisible}>
                         <Filters {...this.props} />
                     </Sidebar>
                     <Sidebar.Pusher>
