@@ -16,14 +16,6 @@ The [Dronemappr API](https://github.com/avcohen/openDrone) is live and hosted at
 _Please note the SSL certificate is self signed, you'll need to accept it prior to being able to access data!_
 _Simply go to the HTTPS link above, and accept the certificate, you'll then be able to use the client._
 
-### Installation
-
-```bash
-$ git clone git@github.com:avcohen/openDroneClient.git
-$ cd openDroneClient
-$ cd js && npm install
-```
-
 Dronemappr uses the [Google Maps JS API](https://developers.google.com/maps/documentation/javascript/). While a Google Maps API key is provided by default for ease of use, _please_ strictly limit the use of this key and replace it if you intend to utilize this software.
 
 ## Thanks
