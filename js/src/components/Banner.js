@@ -42,8 +42,9 @@ export default class Banner extends Component {
                     Dronemappr
                     </Header.Content>
                 </Header>
-                <Counter {...this.props} />
+
             </div>
         );
     }
 }
+                // <Counter {...this.props} />

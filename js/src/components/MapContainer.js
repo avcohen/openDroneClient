@@ -8,7 +8,6 @@ export default class MapContainer extends Component {
 
 	constructor(props){
 		super(props);
-		this.props.dispatch('FETCH_ALL_DATA');
 		this.state = {
 			filtered : false,
 			mapLoaded : false,

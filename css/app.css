@@ -11,6 +11,10 @@ input {
     padding : 10px;
 }
 
+.pageFooter {
+    margin : 10px;
+}
+
 .header {
     display: flex;
     justify-content: left;

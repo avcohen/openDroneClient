@@ -17,7 +17,6 @@ export default class Counter extends Component {
             const y = d.getFullYear();
             return y
         }))
-        console.log(startYear)
         return startYear;
     }
 
@@ -27,10 +26,16 @@ export default class Counter extends Component {
 
         const counterStyle = {
             fontFamily : 'solari',
-            fontSize : '45px',
+            fontSize : '25px',
             marginTop : '50px',
             paddingTop : '20px',
         };
+
+        const _counterHeader = {
+            display : 'inline',
+            paddingLeft : '10px',
+        }
+
 
         return(
             <div>
@@ -45,7 +50,7 @@ export default class Counter extends Component {
                   redraw={this.state.redraw}
                   decimal=","
                 />
-            <h2>Strikes since {this._getStartYear()}</h2>
+            <h3 style={_counterHeader}>Strikes since {this._getStartYear()}</h3>
             </div>
         );
     };
