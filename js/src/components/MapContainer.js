@@ -65,7 +65,7 @@ export default class MapContainer extends Component {
 			});
 
 			const htmlLinkConstructor = (currMarker) => {
-				let html = '';
+				let htmlString = '';
 				const linkArray = [];
 
 				for(let i = 1; i < 5 ; i++){
@@ -75,27 +75,11 @@ export default class MapContainer extends Component {
 				}
 
 				linkArray.forEach((link, i) => {
-						console.log(link)
-						console.log(i)
-						html += `<div class="item"><a href=${link} target="_blank">Link ${i+1}</a></div>`;
+						htmlString += `<div class="item"><a href=${link} target="_blank">Link ${i+1}</a></div>`;
 				})
-
-
-				return html
+				return htmlString
 			}
 
-// old
-			// <div class="summary">${marker.strikeData.country}</div>
-			// <div class="summary">Date : ${marker.strikeData.date}</div>
-			// <div class="summary">Casualties : ${marker.strikeData.kills}</div>
-			// <div class="summary">Details : ${marker.strikeData.description}</div>
-			// <div class="summary">Coords : ${marker.strikeData.coords.lat.toFixed(5) || 'N/A'} , ${marker.strikeData.coords.lng.toFixed(5)}</div>
-			// <div class="summary strikeLinks">
-			// 	<div class="ui horizontal list">
-			// 		${htmlLinkConstructor(marker)}
-			// 	</div>
-			// </div>
-			//
 			const infoWindow = new google.maps.InfoWindow({
 				content : `
 					<div class="ui card">
@@ -114,11 +98,6 @@ export default class MapContainer extends Component {
 						</div>
 					</div>
 				`,
-
-
-
-
-
 			});
 
 			marker.addListener('click', () => {

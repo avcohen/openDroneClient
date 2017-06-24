@@ -27983,7 +27983,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var loading = false;
+var loading = true;
 
 var Main = function (_Component) {
     _inherits(Main, _Component);
@@ -28031,10 +28031,8 @@ var Main = function (_Component) {
                     return _this3.dispatch.apply(_this3, arguments);
                 }
             };
-
-            this.dispatch('FETCH_ALL_DATA');
-
             if (loading) {
+                this.dispatch('FETCH_ALL_DATA');
                 return _react2.default.createElement(
                     _semanticUiReact.Dimmer,
                     { active: true },
@@ -28862,7 +28860,7 @@ var MapContainer = function (_Component) {
 				});
 
 				var htmlLinkConstructor = function htmlLinkConstructor(currMarker) {
-					var html = '';
+					var htmlString = '';
 					var linkArray = [];
 
 					for (var _i = 1; _i < 5; _i++) {
@@ -28872,29 +28870,13 @@ var MapContainer = function (_Component) {
 					}
 
 					linkArray.forEach(function (link, i) {
-						console.log(link);
-						console.log(i);
-						html += '<div class="item"><a href=' + link + ' target="_blank">Link ' + (i + 1) + '</a></div>';
+						htmlString += '<div class="item"><a href=' + link + ' target="_blank">Link ' + (i + 1) + '</a></div>';
 					});
-
-					return html;
+					return htmlString;
 				};
 
-				// old
-				// <div class="summary">${marker.strikeData.country}</div>
-				// <div class="summary">Date : ${marker.strikeData.date}</div>
-				// <div class="summary">Casualties : ${marker.strikeData.kills}</div>
-				// <div class="summary">Details : ${marker.strikeData.description}</div>
-				// <div class="summary">Coords : ${marker.strikeData.coords.lat.toFixed(5) || 'N/A'} , ${marker.strikeData.coords.lng.toFixed(5)}</div>
-				// <div class="summary strikeLinks">
-				// 	<div class="ui horizontal list">
-				// 		${htmlLinkConstructor(marker)}
-				// 	</div>
-				// </div>
-				//
 				var infoWindow = new google.maps.InfoWindow({
 					content: '\n\t\t\t\t\t<div class="ui card">\n\t\t\t\t\t\t<div class="content">\n\t\t\t\t\t\t\t<div class="header">' + marker.strikeData.country + '</div>\n\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t<div class="meta">Date : ' + marker.strikeData.date + '</div>\n\t\t\t\t\t\t\t<div class="meta">Casualties : ' + marker.strikeData.kills + '</div>\n\t\t\t\t\t\t\t<div class="meta">Coords : ' + (marker.strikeData.coords.lat.toFixed(5) || 'N/A') + ' , ' + marker.strikeData.coords.lng.toFixed(5) + '</div>\n\t\t\t\t\t\t\t<div class="description">' + marker.strikeData.description + '</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class="extra content">\n\t\t\t\t\t\t\t<div class="ui mini horizontal divided list">\n\t\t\t\t\t\t\t\t' + htmlLinkConstructor(marker) + '\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t'
-
 				});
 
 				marker.addListener('click', function () {

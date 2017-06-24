@@ -4,7 +4,7 @@ import { Dimmer, Loader } from 'semantic-ui-react';
 import { actions } from './actions';
 import { Store } from './store';
 
-let loading = false;
+let loading = true;
 
 export default class Main extends Component {
     state = Store
@@ -24,10 +24,8 @@ export default class Main extends Component {
 		const sharedProps = {
 			dispatch: (...args) => this.dispatch(...args),
 		};
-
-        this.dispatch('FETCH_ALL_DATA');
-
         if (loading){
+            this.dispatch('FETCH_ALL_DATA');
             return(
                 <Dimmer active>
                     <Loader indeterminate>Loading</Loader>
