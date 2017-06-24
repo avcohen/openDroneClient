@@ -77,12 +77,7 @@ export default class MapContainer extends Component {
 				linkArray.forEach((link, i) => {
 						console.log(link)
 						console.log(i)
-						//old <div class="item"><a href=${link} target="_blank">Link ${i+1}</a></div>
-						html += `
-							<div class="ui horizontal list">
-								<div class="item"><a href=${link} target="_blank">Link ${i+1}</a></div>
-							</div>
-						`
+						html += `<div class="item"><a href=${link} target="_blank">Link ${i+1}</a></div>`;
 				})
 
 
@@ -113,7 +108,9 @@ export default class MapContainer extends Component {
 							<div class="description">${marker.strikeData.description}</div>
 						</div>
 						<div class="extra content">
-							${htmlLinkConstructor(marker)}
+							<div class="ui mini horizontal divided list">
+								${htmlLinkConstructor(marker)}
+							</div>
 						</div>
 					</div>
 				`,
