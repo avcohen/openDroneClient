@@ -43,41 +43,85 @@ export default class MapContainer extends Component {
                 mapLoaded: true,
             }))
     };
-
 	_markerConstructor(markerArray){
 		markerArray.forEach((strike, i) => {
 			if (!this.map) return;
-			const strikePosition = { lat : strike.lat , lng : strike.lon }
+			const strikePosition = { lat : strike.lat , lng : strike.lng }
 
 			const marker = new google.maps.Marker({
 				strikeData : {
 					country : strike.country,
 					date : strike.date,
+					description : strike.description,
 					kills : strike.kills,
-					coords : { lat : strike.lat , lng : strike.lon }
+					coords : { lat : strike.lat , lng : strike.lng },
+					l1 : strike.l1 ? strike.l1 : undefined,
+					l2 : strike.l2 ? strike.l2 : undefined,
+					l3 : strike.l3 ? strike.l3 : undefined,
+					l4 : strike.l4 ? strike.l4 : undefined,
 				},
-				position : { lat : strike.lat, lng : strike.lon },
+				position : { lat : strike.lat, lng : strike.lng },
 				map : this.map,
 			});
 
+			const htmlLinkConstructor = (currMarker) => {
+				let html = '';
+				const linkArray = [];
+
+				for(let i = 1; i < 5 ; i++){
+					if ( currMarker.strikeData[`l${i}`]){
+						linkArray.push(currMarker.strikeData[`l${i}`])
+					}
+				}
+
+				linkArray.forEach((link, i) => {
+						console.log(link)
+						console.log(i)
+						//old <div class="item"><a href=${link} target="_blank">Link ${i+1}</a></div>
+						html += `
+							<div class="ui horizontal list">
+								<div class="item"><a href=${link} target="_blank">Link ${i+1}</a></div>
+							</div>
+						`
+				})
+
+
+				return html
+			}
+
+// old
+			// <div class="summary">${marker.strikeData.country}</div>
+			// <div class="summary">Date : ${marker.strikeData.date}</div>
+			// <div class="summary">Casualties : ${marker.strikeData.kills}</div>
+			// <div class="summary">Details : ${marker.strikeData.description}</div>
+			// <div class="summary">Coords : ${marker.strikeData.coords.lat.toFixed(5) || 'N/A'} , ${marker.strikeData.coords.lng.toFixed(5)}</div>
+			// <div class="summary strikeLinks">
+			// 	<div class="ui horizontal list">
+			// 		${htmlLinkConstructor(marker)}
+			// 	</div>
+			// </div>
+			//
 			const infoWindow = new google.maps.InfoWindow({
 				content : `
 					<div class="ui card">
 						<div class="content">
-							<div class="header">Strike Data</div>
+							<div class="header">${marker.strikeData.country}</div>
+							<br>
+							<div class="meta">Date : ${marker.strikeData.date}</div>
+							<div class="meta">Casualties : ${marker.strikeData.kills}</div>
+							<div class="meta">Coords : ${marker.strikeData.coords.lat.toFixed(5) || 'N/A'} , ${marker.strikeData.coords.lng.toFixed(5)}</div>
+							<div class="description">${marker.strikeData.description}</div>
 						</div>
-						<div class="content">
-							<div class="ui small feed">
-								<div class="summary">${marker.strikeData.country}</div>
-								<div class="summary">Date : ${marker.strikeData.date}</div>
-								<div class="summary">Casualties : ${marker.strikeData.kills}</div>
-								<div class="summary">
-									Coords : ${marker.strikeData.coords.lat.toFixed(3)} , ${marker.strikeData.coords.lng.toFixed(3)}
-								</div>
-							</div>
+						<div class="extra content">
+							${htmlLinkConstructor(marker)}
 						</div>
 					</div>
 				`,
+
+
+
+
+
 			});
 
 			marker.addListener('click', () => {

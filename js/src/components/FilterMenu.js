@@ -28,7 +28,6 @@ export default class FilterMenu extends Component {
     };
 
     menuStyles = {
-        marginTop: '20px',
         zIndex : 4,
     }
 

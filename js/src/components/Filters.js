@@ -7,8 +7,10 @@ const options = {
     country : [
         { key : 'all', text: 'All', value : 'all' },
         { key: 'afganistan', text: 'Afghanistan', value: 'afghanistan', flag : 'af' },
+        { key: 'iraq', text: 'Iraq', value: 'iraq', flag : 'iq' },
         { key: 'pakistan', text: 'Pakistan', value: 'pakistan', flag : 'pk' },
         { key: 'syria', text: 'Syria', value: 'syria', flag : 'sy' },
+        { key: 'somalia', text: 'Somalia', value: 'somalia', flag : 'so' },
         { key: 'yemen', text: 'Yemen', value: 'yemen', flag : 'ye' },
     ],
     year : [
@@ -100,7 +102,7 @@ export default class Filters extends Component {
 
                     <Grid.Row style={_rowStyle}>
                         <Form.Group>
-                            <Form.Button label="Apply Filter" onClick={this._onFilterSubmit} ><Icon name="filter"></Icon></Form.Button>
+                            <Form.Button label="Filter Layer" onClick={this._onFilterSubmit} ><Icon name="filter"></Icon></Form.Button>
                             <Form.Button label="Add Layer" onClick={this._addLayer} >
                                 <Icon.Group>
                                     <Icon name='clone' />
@@ -110,8 +112,7 @@ export default class Filters extends Component {
 
                             <Form.Button label="Clear Layers" onClick={this._clearAllLayers} >
                                 <Icon.Group>
-                                    <Icon name='clone' />
-                                    <Icon corner name='remove' />
+                                    <Icon name='trash' />
                                 </Icon.Group>
                             </Form.Button>
                         </Form.Group>

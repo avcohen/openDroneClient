@@ -28311,7 +28311,6 @@ var FilterMenu = function (_Component) {
         };
 
         _this.menuStyles = {
-            marginTop: '20px',
             zIndex: 4
         };
 
@@ -28397,7 +28396,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var options = {
-    country: [{ key: 'all', text: 'All', value: 'all' }, { key: 'afganistan', text: 'Afghanistan', value: 'afghanistan', flag: 'af' }, { key: 'pakistan', text: 'Pakistan', value: 'pakistan', flag: 'pk' }, { key: 'syria', text: 'Syria', value: 'syria', flag: 'sy' }, { key: 'yemen', text: 'Yemen', value: 'yemen', flag: 'ye' }],
+    country: [{ key: 'all', text: 'All', value: 'all' }, { key: 'afganistan', text: 'Afghanistan', value: 'afghanistan', flag: 'af' }, { key: 'iraq', text: 'Iraq', value: 'iraq', flag: 'iq' }, { key: 'pakistan', text: 'Pakistan', value: 'pakistan', flag: 'pk' }, { key: 'syria', text: 'Syria', value: 'syria', flag: 'sy' }, { key: 'somalia', text: 'Somalia', value: 'somalia', flag: 'so' }, { key: 'yemen', text: 'Yemen', value: 'yemen', flag: 'ye' }],
     year: [{ key: 'all', text: 'All', value: 'all' }, { key: '2015', text: '2015', value: 2015 }, { key: '2016', text: '2016', value: 2016 }, { key: '2017', text: '2017', value: 2017 }]
 };
 
@@ -28502,7 +28501,7 @@ var Filters = function (_Component) {
                             null,
                             _react2.default.createElement(
                                 _semanticUiReact.Form.Button,
-                                { label: 'Apply Filter', onClick: this._onFilterSubmit },
+                                { label: 'Filter Layer', onClick: this._onFilterSubmit },
                                 _react2.default.createElement(_semanticUiReact.Icon, { name: 'filter' })
                             ),
                             _react2.default.createElement(
@@ -28521,8 +28520,7 @@ var Filters = function (_Component) {
                                 _react2.default.createElement(
                                     _semanticUiReact.Icon.Group,
                                     null,
-                                    _react2.default.createElement(_semanticUiReact.Icon, { name: 'clone' }),
-                                    _react2.default.createElement(_semanticUiReact.Icon, { corner: true, name: 'remove' })
+                                    _react2.default.createElement(_semanticUiReact.Icon, { name: 'trash' })
                                 )
                             )
                         )
@@ -28844,21 +28842,59 @@ var MapContainer = function (_Component) {
 
 			markerArray.forEach(function (strike, i) {
 				if (!_this3.map) return;
-				var strikePosition = { lat: strike.lat, lng: strike.lon };
+				var strikePosition = { lat: strike.lat, lng: strike.lng };
 
 				var marker = new google.maps.Marker({
 					strikeData: {
 						country: strike.country,
 						date: strike.date,
+						description: strike.description,
 						kills: strike.kills,
-						coords: { lat: strike.lat, lng: strike.lon }
+						coords: { lat: strike.lat, lng: strike.lng },
+						l1: strike.l1 ? strike.l1 : undefined,
+						l2: strike.l2 ? strike.l2 : undefined,
+						l3: strike.l3 ? strike.l3 : undefined,
+						l4: strike.l4 ? strike.l4 : undefined
 					},
-					position: { lat: strike.lat, lng: strike.lon },
+					position: { lat: strike.lat, lng: strike.lng },
 					map: _this3.map
 				});
 
+				var htmlLinkConstructor = function htmlLinkConstructor(currMarker) {
+					var html = '';
+					var linkArray = [];
+
+					for (var _i = 1; _i < 5; _i++) {
+						if (currMarker.strikeData['l' + _i]) {
+							linkArray.push(currMarker.strikeData['l' + _i]);
+						}
+					}
+
+					linkArray.forEach(function (link, i) {
+						console.log(link);
+						console.log(i
+						//old <div class="item"><a href=${link} target="_blank">Link ${i+1}</a></div>
+						);html += '\n\t\t\t\t\t\t\t<div class="ui horizontal list">\n\t\t\t\t\t\t\t\t<div class="item"><a href=' + link + ' target="_blank">Link ' + (i + 1) + '</a></div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t';
+					});
+
+					return html;
+				};
+
+				// old
+				// <div class="summary">${marker.strikeData.country}</div>
+				// <div class="summary">Date : ${marker.strikeData.date}</div>
+				// <div class="summary">Casualties : ${marker.strikeData.kills}</div>
+				// <div class="summary">Details : ${marker.strikeData.description}</div>
+				// <div class="summary">Coords : ${marker.strikeData.coords.lat.toFixed(5) || 'N/A'} , ${marker.strikeData.coords.lng.toFixed(5)}</div>
+				// <div class="summary strikeLinks">
+				// 	<div class="ui horizontal list">
+				// 		${htmlLinkConstructor(marker)}
+				// 	</div>
+				// </div>
+				//
 				var infoWindow = new google.maps.InfoWindow({
-					content: '\n\t\t\t\t\t<div class="ui card">\n\t\t\t\t\t\t<div class="content">\n\t\t\t\t\t\t\t<div class="header">Strike Data</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class="content">\n\t\t\t\t\t\t\t<div class="ui small feed">\n\t\t\t\t\t\t\t\t<div class="summary">' + marker.strikeData.country + '</div>\n\t\t\t\t\t\t\t\t<div class="summary">Date : ' + marker.strikeData.date + '</div>\n\t\t\t\t\t\t\t\t<div class="summary">Casualties : ' + marker.strikeData.kills + '</div>\n\t\t\t\t\t\t\t\t<div class="summary">\n\t\t\t\t\t\t\t\t\tCoords : ' + marker.strikeData.coords.lat.toFixed(3) + ' , ' + marker.strikeData.coords.lng.toFixed(3) + '\n\t\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t'
+					content: '\n\t\t\t\t\t<div class="ui card">\n\t\t\t\t\t\t<div class="content">\n\t\t\t\t\t\t\t<div class="header">' + marker.strikeData.country + '</div>\n\t\t\t\t\t\t\t<br>\n\t\t\t\t\t\t\t<div class="meta">Date : ' + marker.strikeData.date + '</div>\n\t\t\t\t\t\t\t<div class="meta">Casualties : ' + marker.strikeData.kills + '</div>\n\t\t\t\t\t\t\t<div class="meta">Coords : ' + (marker.strikeData.coords.lat.toFixed(5) || 'N/A') + ' , ' + marker.strikeData.coords.lng.toFixed(5) + '</div>\n\t\t\t\t\t\t\t<div class="description">' + marker.strikeData.description + '</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class="extra content">\n\t\t\t\t\t\t\t' + htmlLinkConstructor(marker) + '\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</div>\n\t\t\t\t'
+
 				});
 
 				marker.addListener('click', function () {
