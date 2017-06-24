@@ -11,7 +11,7 @@ Data is provided by the [Dronemappr API](https://github.com/avcohen/openDrone).
 
 **!!! Important !!!**
 
-The [Dronemappr API](https://github.com/avcohen/openDrone) is live and hosted at [https://104.236.214.92:8443/api/](https://104.236.214.92:8443/api/).
+The [Dronemappr API](https://github.com/avcohen/openDrone) is live and hosted at [https://104.236.214.92:8443/api/v1/](https://104.236.214.92:8443/api/v1).
 
 _Please note the SSL certificate is self signed, you'll need to accept it prior to being able to access data!_
 _Simply go to the HTTPS link above, and accept the certificate, you'll then be able to use the client._
