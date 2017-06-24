@@ -34,19 +34,14 @@ export default class Banner extends Component {
 
     render() {
         const { activeMenuItem } = this.state;
-
         return (
             <div>
-                <Header as='h2'>
+                <Header as='h1'>
                 <Image src='assets/drone.png' avatar/>
                     <Header.Content>
                     Dronemappr
                     </Header.Content>
                 </Header>
-
-                <Menu>
-                    {this._renderMenuItems()}
-                </Menu>
                 <Counter {...this.props} />
             </div>
         );

@@ -14078,6 +14078,19 @@ var Counter = function (_Component) {
     }
 
     _createClass(Counter, [{
+        key: '_getStartYear',
+        value: function _getStartYear() {
+            var cachedResults = this.props.cachedResults;
+
+            var startYear = Math.min.apply(Math, cachedResults.map(function (i) {
+                var d = new Date(i.date);
+                var y = d.getFullYear();
+                return y;
+            }));
+            console.log(startYear);
+            return startYear;
+        }
+    }, {
         key: 'render',
         value: function render() {
 
@@ -14086,6 +14099,7 @@ var Counter = function (_Component) {
             var counterStyle = {
                 fontFamily: 'solari',
                 fontSize: '45px',
+                marginTop: '50px',
                 paddingTop: '20px'
             };
 
@@ -14102,7 +14116,13 @@ var Counter = function (_Component) {
                     separator: ' ',
                     redraw: this.state.redraw,
                     decimal: ','
-                })
+                }),
+                _react2.default.createElement(
+                    'h2',
+                    null,
+                    'Strikes since ',
+                    this._getStartYear()
+                )
             );
         }
     }]);
@@ -27930,7 +27950,7 @@ request.put = function(url, data, fn){
 
 
 Object.defineProperty(exports, "__esModule", {
-	value: true
+    value: true
 });
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -27945,6 +27965,8 @@ var _App = __webpack_require__(432);
 
 var _App2 = _interopRequireDefault(_App);
 
+var _semanticUiReact = __webpack_require__(64);
+
 var _actions = __webpack_require__(439);
 
 var _store = __webpack_require__(441);
@@ -27957,51 +27979,73 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var loading = true;
+
 var Main = function (_Component) {
-	_inherits(Main, _Component);
+    _inherits(Main, _Component);
 
-	function Main() {
-		var _ref;
+    function Main() {
+        var _ref;
 
-		var _temp, _this, _ret;
+        var _temp, _this, _ret;
 
-		_classCallCheck(this, Main);
+        _classCallCheck(this, Main);
 
-		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-			args[_key] = arguments[_key];
-		}
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+        }
 
-		return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Main.__proto__ || Object.getPrototypeOf(Main)).call.apply(_ref, [this].concat(args))), _this), _this.state = _store.Store, _temp), _possibleConstructorReturn(_this, _ret);
-	}
+        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Main.__proto__ || Object.getPrototypeOf(Main)).call.apply(_ref, [this].concat(args))), _this), _this.state = _store.Store, _temp), _possibleConstructorReturn(_this, _ret);
+    }
 
-	_createClass(Main, [{
-		key: 'dispatch',
-		value: function dispatch(actionName, options) {
-			var _this2 = this;
+    _createClass(Main, [{
+        key: 'dispatch',
+        value: function dispatch(actionName, options) {
+            var _this2 = this;
 
-			var actionToDo = _actions.actions[actionName];
-			actionToDo(this.state, options).then(function (newStore) {
-				_this2.setState(newStore);
-			}).catch(function (e) {
-				return console.log(e);
-			});;
-		}
-	}, {
-		key: 'render',
-		value: function render() {
-			var _this3 = this;
+            var actionToDo = _actions.actions[actionName];
+            actionToDo(this.state, options).then(function (newStore) {
+                _this2.setState(newStore);
+            }).catch(function (e) {
+                return console.log(e);
+            });;
+        }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            setTimeout(function () {
+                loading = false;
+            }, 500);
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this3 = this;
 
-			var sharedProps = {
-				dispatch: function dispatch() {
-					return _this3.dispatch.apply(_this3, arguments);
-				}
-			};
+            var sharedProps = {
+                dispatch: function dispatch() {
+                    return _this3.dispatch.apply(_this3, arguments);
+                }
+            };
 
-			return _react2.default.createElement(_App2.default, _extends({}, this.state, sharedProps));
-		}
-	}]);
+            if (loading) {
+                this.dispatch('FETCH_ALL_DATA');
+                return _react2.default.createElement(
+                    _semanticUiReact.Dimmer,
+                    { active: true },
+                    _react2.default.createElement(
+                        _semanticUiReact.Loader,
+                        { indeterminate: true },
+                        'Loading'
+                    )
+                );
+            } else {
+                return _react2.default.createElement(_App2.default, _extends({}, this.state, sharedProps));
+            }
+        }
+    }]);
 
-	return Main;
+    return Main;
 }(_react.Component);
 
 exports.default = Main;
@@ -28063,7 +28107,12 @@ var App = function (_Component) {
     function App(props) {
         _classCallCheck(this, App);
 
-        return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+
+        _this.state = {
+            loading: false
+        };
+        return _this;
     }
 
     _createClass(App, [{
@@ -28073,9 +28122,11 @@ var App = function (_Component) {
                 textAlign: 'left',
                 padding: '5px'
             };
+
             return _react2.default.createElement(
                 'div',
                 null,
+                _react2.default.createElement(_semanticUiReact.Dimmer, { active: this.state.loading }),
                 _react2.default.createElement(_Banner2.default, this.props),
                 _react2.default.createElement(_FilterMenu2.default, this.props),
                 _react2.default.createElement(
@@ -28083,7 +28134,7 @@ var App = function (_Component) {
                     null,
                     _react2.default.createElement(
                         _semanticUiReact.Sidebar,
-                        { style: _sidebarStyle, as: _semanticUiReact.Menu, animation: 'push', direction: 'top', visible: this.props.filterMenuVisible },
+                        { style: _sidebarStyle, as: _semanticUiReact.Menu, animation: 'overlay', direction: 'top', visible: this.props.filterMenuVisible },
                         _react2.default.createElement(_Filters2.default, this.props)
                     ),
                     _react2.default.createElement(
@@ -28099,9 +28150,6 @@ var App = function (_Component) {
 
     return App;
 }(_react.Component);
-
-//
-
 
 exports.default = App;
 
@@ -28184,24 +28232,18 @@ var Banner = function (_Component) {
         value: function render() {
             var activeMenuItem = this.state.activeMenuItem;
 
-
             return _react2.default.createElement(
                 'div',
                 null,
                 _react2.default.createElement(
                     _semanticUiReact.Header,
-                    { as: 'h2' },
+                    { as: 'h1' },
                     _react2.default.createElement(_semanticUiReact.Image, { src: 'assets/drone.png', avatar: true }),
                     _react2.default.createElement(
                         _semanticUiReact.Header.Content,
                         null,
                         'Dronemappr'
                     )
-                ),
-                _react2.default.createElement(
-                    _semanticUiReact.Menu,
-                    null,
-                    this._renderMenuItems()
                 ),
                 _react2.default.createElement(_Counter2.default, this.props)
             );
@@ -28426,7 +28468,8 @@ var Filters = function (_Component) {
             };
 
             var _rowStyle = {
-                padding: '5px'
+                padding: '5px',
+                margin: '5px'
             };
 
             return _react2.default.createElement(
@@ -28442,9 +28485,13 @@ var Filters = function (_Component) {
                             _semanticUiReact.Form.Group,
                             { widths: 'equal' },
                             _react2.default.createElement(_semanticUiReact.Form.Input, { name: 'filterName', placeholder: 'Filter Name', onChange: this._onFilterChange }),
-                            _react2.default.createElement(_semanticUiReact.Dropdown, { inline: true, search: true, selection: true, name: 'country', label: 'Country', options: options.country, placeholder: 'Country', onChange: this._onFilterChange }),
-                            _react2.default.createElement(_semanticUiReact.Dropdown, { inline: true, search: true, selection: true, name: 'year', label: 'Year', options: options.year, placeholder: 'Year', onChange: this._onFilterChange })
-                        ),
+                            _react2.default.createElement(_semanticUiReact.Form.Dropdown, { search: true, selection: true, name: 'country', options: options.country, placeholder: 'Country', onChange: this._onFilterChange }),
+                            _react2.default.createElement(_semanticUiReact.Form.Dropdown, { search: true, selection: true, name: 'year', options: options.year, placeholder: 'Year', onChange: this._onFilterChange })
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _semanticUiReact.Grid.Row,
+                        { style: _rowStyle },
                         _react2.default.createElement(
                             _semanticUiReact.Form.Group,
                             null,
@@ -28734,7 +28781,6 @@ var MapContainer = function (_Component) {
 		};
 		_this._shimStyles = {
 			position: 'absolute',
-			zIndex: 2,
 			height: '100%',
 			width: '100%',
 			top: 0,
@@ -28811,14 +28857,6 @@ var MapContainer = function (_Component) {
 				_this3.infoWindows.push(infoWindow);
 			});
 		}
-
-		/**
-   * _loadMarkers - description
-   *
-   * @param  {type} props = this.props description
-   * @return {type}                    description
-   */
-
 	}, {
 		key: '_loadMarkers',
 		value: function _loadMarkers() {
@@ -28856,9 +28894,7 @@ var MapContainer = function (_Component) {
 					return r.country.toLowerCase() === filterLayer.country && fullYear === filterLayer.year;
 				});
 				_this4._markerConstructor(filteredData);
-			}
-			// const dataToLoad = (filteredResults.length === 0) ? cachedResults : filteredResults;
-			);
+			});
 		}
 	}, {
 		key: '_initShimLogic',
@@ -28882,8 +28918,8 @@ var MapContainer = function (_Component) {
 	}, {
 		key: 'componentDidMount',
 		value: function componentDidMount() {
-			this._loadMap();
 			this._initShimLogic();
+			this._loadMap();
 		}
 	}, {
 		key: 'componentWillReceiveProps',
@@ -29135,6 +29171,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 var Store = exports.Store = {
+    loading: true,
     cachedResults: [],
     center: { lat: 30.4472723, lng: 58.5645771 },
     displayAll: true,

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Layers from './Layers';
-import { Container, Dropdown, Form, Grid, Icon, Menu, Message } from 'semantic-ui-react';
+import { Container, Form, Grid, Icon, Menu, Message } from 'semantic-ui-react';
 
 const options = {
     country : [
@@ -84,8 +84,8 @@ export default class Filters extends Component {
 
         const _rowStyle = {
             padding : '5px',
+            margin : '5px',
         }
-
 
         return (
             <Form className={"info message"} style={_formStyle}>
@@ -93,11 +93,13 @@ export default class Filters extends Component {
                     <Grid.Row style={_rowStyle}>
                         <Form.Group widths='equal'>
                             <Form.Input name="filterName" placeholder="Filter Name" onChange={this._onFilterChange} />
-                            <Dropdown inline search selection name="country" label="Country" options={options.country} placeholder="Country" onChange={this._onFilterChange} />
-                            <Dropdown inline search selection name="year" label="Year" options={options.year} placeholder="Year" onChange={this._onFilterChange} />
+                            <Form.Dropdown search selection name="country" options={options.country} placeholder="Country" onChange={this._onFilterChange} />
+                            <Form.Dropdown search selection name="year" options={options.year} placeholder="Year" onChange={this._onFilterChange} />
                         </Form.Group>
-                        <Form.Group>
+                    </Grid.Row>
 
+                    <Grid.Row style={_rowStyle}>
+                        <Form.Group>
                             <Form.Button label="Apply Filter" onClick={this._onFilterSubmit} ><Icon name="filter"></Icon></Form.Button>
                             <Form.Button label="Add Layer" onClick={this._addLayer} >
                                 <Icon.Group>
@@ -118,6 +120,7 @@ export default class Filters extends Component {
                     <Grid.Row style={_rowStyle}>
                         <Layers {...this.props} />
                     </Grid.Row>
+
                 </Grid>
             </Form>
         );

@@ -25,7 +25,6 @@ export default class MapContainer extends Component {
 
     _shimStyles = {
         position: 'absolute',
-        zIndex: 2,
         height: '100%',
         width: '100%',
         top: 0,
@@ -96,13 +95,6 @@ export default class MapContainer extends Component {
 		})
 	}
 
-	/**
-	 * _loadMarkers - description
-	 *
-	 * @param  {type} props = this.props description
-	 * @return {type}                    description
-	 */
-
 	_loadMarkers(props = this.props) {
 		const {cachedResults, filteredResults , filterLayers, displayAll } = props;
 
@@ -131,7 +123,6 @@ export default class MapContainer extends Component {
 			})
 			this._markerConstructor(filteredData);
 		})
-		// const dataToLoad = (filteredResults.length === 0) ? cachedResults : filteredResults;
 	};
 
     _initShimLogic() {
@@ -153,8 +144,8 @@ export default class MapContainer extends Component {
     };
 
     componentDidMount(){
-		this._loadMap();
         this._initShimLogic();
+		this._loadMap();
     };
 
 	componentWillReceiveProps(nextProps) {

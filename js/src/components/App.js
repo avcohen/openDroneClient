@@ -4,13 +4,16 @@ import Filters from './Filters';
 import Footer from './Footer';
 import FilterMenu from './FilterMenu';
 import MapContainer from './MapContainer';
-import { Menu, Sidebar } from 'semantic-ui-react';
+import { Dimmer, Loader, Menu, Sidebar } from 'semantic-ui-react';
 
 const apiKey = 'AIzaSyCgnmah1dhhXHZBFOj4z3CTuGxaatp0htE';
 
 export default class App extends Component {
     constructor(props){
         super(props)
+        this.state = {
+            loading : false,
+        }
     }
 
     render() {
@@ -18,12 +21,14 @@ export default class App extends Component {
             textAlign : 'left',
             padding : '5px',
         }
+
         return (
             <div>
+            <Dimmer active={this.state.loading} />
                 <Banner {...this.props} />
                 <FilterMenu {...this.props} />
                 <Sidebar.Pushable>
-                    <Sidebar style={_sidebarStyle} as={Menu} animation='push' direction='top' visible={this.props.filterMenuVisible}>
+                    <Sidebar style={_sidebarStyle} as={Menu} animation='overlay' direction='top' visible={this.props.filterMenuVisible}>
                         <Filters {...this.props} />
                     </Sidebar>
                     <Sidebar.Pusher>
@@ -35,5 +40,3 @@ export default class App extends Component {
         );
     }
 }
-
-//
