@@ -24,6 +24,7 @@ export function removeAllFilters(oldState){
     })
 };
 
+const values = require('object.values');
 export function fetchAll(oldState, options) {
     // console.log('returning all data from api')
     return new Promise((resolve, reject) => {
@@ -35,7 +36,7 @@ export function fetchAll(oldState, options) {
                     return;
                 }
                 const jsonData = JSON.parse(res.text);
-                const arrayResults = Object.values(jsonData);
+                const arrayResults = values(jsonData);
                 resolve(Object.assign({}, oldState, {
                     cachedResults : arrayResults
                 }))
