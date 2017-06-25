@@ -12,6 +12,10 @@ input {
     padding : 10px;
 }
 
+div.menu.transition.visible {
+  max-height: 10rem !important;
+}
+
 .pageFooter {
     margin : 10px;
 }

@@ -95,8 +95,8 @@ export default class Filters extends Component {
                     <Grid.Row style={_rowStyle}>
                         <Form.Group widths='equal'>
                             <Form.Input name="filterName" placeholder="Filter Name" onChange={this._onFilterChange} />
-                            <Form.Dropdown search selection name="country" options={options.country} placeholder="Country" onChange={this._onFilterChange} />
-                            <Form.Dropdown search selection name="year" options={options.year} placeholder="Year" onChange={this._onFilterChange} />
+                            <Form.Dropdown size="3" search selection name="country" options={options.country} placeholder="Country" onChange={this._onFilterChange} />
+                            <Form.Dropdown size="3" search selection name="year" options={options.year} placeholder="Year" onChange={this._onFilterChange} />
                         </Form.Group>
                     </Grid.Row>
 

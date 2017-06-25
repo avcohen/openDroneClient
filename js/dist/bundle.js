@@ -28488,8 +28488,8 @@ var Filters = function (_Component) {
                             _semanticUiReact.Form.Group,
                             { widths: 'equal' },
                             _react2.default.createElement(_semanticUiReact.Form.Input, { name: 'filterName', placeholder: 'Filter Name', onChange: this._onFilterChange }),
-                            _react2.default.createElement(_semanticUiReact.Form.Dropdown, { search: true, selection: true, name: 'country', options: options.country, placeholder: 'Country', onChange: this._onFilterChange }),
-                            _react2.default.createElement(_semanticUiReact.Form.Dropdown, { search: true, selection: true, name: 'year', options: options.year, placeholder: 'Year', onChange: this._onFilterChange })
+                            _react2.default.createElement(_semanticUiReact.Form.Dropdown, { size: '3', search: true, selection: true, name: 'country', options: options.country, placeholder: 'Country', onChange: this._onFilterChange }),
+                            _react2.default.createElement(_semanticUiReact.Form.Dropdown, { size: '3', search: true, selection: true, name: 'year', options: options.year, placeholder: 'Year', onChange: this._onFilterChange })
                         )
                     ),
                     _react2.default.createElement(
