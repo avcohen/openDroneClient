@@ -28019,7 +28019,7 @@ var Main = function (_Component) {
         value: function componentDidMount() {
             setTimeout(function () {
                 loading = false;
-            }, 500);
+            }, 250);
         }
     }, {
         key: 'render',

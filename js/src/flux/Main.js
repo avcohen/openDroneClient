@@ -17,7 +17,7 @@ export default class Main extends Component {
 	}
 
     componentDidMount(){
-        setTimeout(() => { loading = false }, 500);
+        setTimeout(() => { loading = false }, 250);
     }
 
 	render() {
