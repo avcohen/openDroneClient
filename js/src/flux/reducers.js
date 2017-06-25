@@ -4,7 +4,10 @@ import request from 'superagent';
 export function addFilterLayer(oldState, layerParams){
     const updatedLayerArray = oldState.filterLayers.concat([Object.assign({},layerParams)])
     return new Promise((resolve, reject) => {
-        resolve({...oldState, filterLayers : updatedLayerArray, displayAll : false })
+        resolve({...oldState,
+                    filterLayers : updatedLayerArray,
+                    displayAll : false,
+                })
     })
 };
 
@@ -24,6 +27,7 @@ export function removeAllFilters(oldState){
     })
 };
 
+const values = require('object.values')
 export function fetchAll(oldState, options) {
     // console.log('returning all data from api')
     return new Promise((resolve, reject) => {
@@ -35,7 +39,7 @@ export function fetchAll(oldState, options) {
                     return;
                 }
                 const jsonData = JSON.parse(res.text);
-                const arrayResults = Object.values(jsonData);
+                const arrayResults = values(jsonData);
                 resolve(Object.assign({}, oldState, {
                     cachedResults : arrayResults
                 }))
@@ -86,6 +90,7 @@ export function removeFilterLayer(oldState, index){
 
 export function toggleFilterMenuVisibility(oldState, options){
     return new Promise((resolve, reject) => {
+        console.log(options)
         resolve({...oldState, filterMenuVisible : options });
     })
     .catch(e => console.log(e));

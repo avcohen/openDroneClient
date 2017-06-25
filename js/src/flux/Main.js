@@ -8,7 +8,7 @@ let loading = true;
 
 export default class Main extends Component {
     state = Store
-	dispatch(actionName, options) {
+	dispatch(actionName, options ) {
 		const actionToDo = actions[actionName];
 		actionToDo(this.state, options).then((newStore) => {
 			this.setState(newStore);
@@ -27,7 +27,7 @@ export default class Main extends Component {
         if (loading){
             this.dispatch('FETCH_ALL_DATA');
             return(
-                <Dimmer active>
+                <Dimmer active={loading}>
                     <Loader indeterminate>Loading</Loader>
                 </Dimmer>
             )

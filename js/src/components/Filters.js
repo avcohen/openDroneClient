@@ -58,7 +58,7 @@ export default class Filters extends Component {
         }
     }
 
-    _onFilterSubmit = (e) => {
+    _applyFilter = (e) => {
         this.props.dispatch('FILTER_STRIKES', this.state);
         e.preventDefault();
     }
@@ -102,7 +102,7 @@ export default class Filters extends Component {
 
                     <Grid.Row style={_rowStyle}>
                         <Form.Group>
-                            <Form.Button label="Filter Layer" onClick={this._onFilterSubmit} ><Icon name="filter"></Icon></Form.Button>
+                            <Form.Button label="Apply Filter" onClick={this._applyFilter} ><Icon name="filter"></Icon></Form.Button>
                             <Form.Button label="Add Layer" onClick={this._addLayer} >
                                 <Icon.Group>
                                     <Icon name='clone' />
