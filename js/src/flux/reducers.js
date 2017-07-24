@@ -32,7 +32,7 @@ export function fetchAll(oldState, options) {
     // console.log('returning all data from api')
     return new Promise((resolve, reject) => {
         request
-            .get('https://104.236.214.92:8443/api/v1/')
+            .get('http://api.dronemappr.com/api/v1/')
             .end((err,res)=>{
                 if (err || !res.ok){
                     reject(err)

@@ -1,4 +1,4 @@
-**[Dronemappr Client v1 ](http://avcohen.github.io/openDroneClient/index.html)**
+**[Dronemappr Client v1 ](http://www.dronemappr.com)**
 ================================================
 
 Dronemappr is a React based client utilizing Flux architecture to visualize, filter, and map drone strike data.
@@ -11,10 +11,7 @@ Data is provided by the [Dronemappr API](https://github.com/avcohen/openDrone).
 
 **!!! Important !!!**
 
-The [Dronemappr API](https://github.com/avcohen/openDrone) is live and hosted at [https://104.236.214.92:8443/api/v1/](https://104.236.214.92:8443/api/v1).
-
-_Please note the SSL certificate is self signed, you'll need to accept it prior to being able to access data!_
-_Simply go to the HTTPS link above, and accept the certificate, you'll then be able to use the client._
+The [Dronemappr API](https://github.com/avcohen/openDrone) is live and hosted at [http://api.dronemappr.com/api/v1/](http://api.dronemappr.com/api/v1/).
 
 Dronemappr uses the [Google Maps JS API](https://developers.google.com/maps/documentation/javascript/). While a Google Maps API key is provided by default for ease of use, _please_ strictly limit the use of this key and replace it if you intend to utilize this software.
 
