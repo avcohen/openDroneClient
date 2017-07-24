@@ -3,6 +3,8 @@
 
 Dronemappr is a React based client utilizing Flux architecture to visualize, filter, and map drone strike data.
 
+A live version of this client is available [here](http://www.dronemappr.com).
+
 Data is provided by the [Dronemappr API](https://github.com/avcohen/openDrone).
 
 ## Usage
