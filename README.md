@@ -7,10 +7,6 @@ Data is provided by the [Dronemappr API](https://github.com/avcohen/openDrone).
 
 ## Usage
 
-### SSL Requirements
-
-**!!! Important !!!**
-
 The [Dronemappr API](https://github.com/avcohen/openDrone) is live and hosted at [http://api.dronemappr.com/api/v1/](http://api.dronemappr.com/api/v1/).
 
 Dronemappr uses the [Google Maps JS API](https://developers.google.com/maps/documentation/javascript/). While a Google Maps API key is provided by default for ease of use, _please_ strictly limit the use of this key and replace it if you intend to utilize this software.
